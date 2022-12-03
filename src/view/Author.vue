@@ -13,14 +13,7 @@ export default {
         List
     },
     created() {
-        let result = JSON.parse(localStorage.getItem('videoList'))
-        console.log('result:'+result);
-        if (result == null) {
-            this.getData()
-        }
-        else {
-            this.videoList = result
-        }
+        this.getData()
     },
     data() {
         return {
@@ -31,11 +24,9 @@ export default {
     methods: {
         // 获取视频数据
         async getData() {
-            // let { data: res }  = await this.$http.get('/movie/getVideoLike/1')
             let { data: res }  = await this.$http.get(`/movie/getAuthor/${this.author}`)
             this.videoList = res.data
-            localStorage.setItem('videoList',JSON.stringify(this.videoList))
-
+            localStorage.setItem('videoList',JSON.stringify(res.data))
         },
     }
 }

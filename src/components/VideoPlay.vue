@@ -1,6 +1,7 @@
 <template>
 	<div class="videoPlayer" @click="click">
-		<video class="video" ref="videoList" :preload="preloadStatus" loop :src="videoList.videoUrl"></video>
+		<video class="video" ref="videoList" :preload="preloadStatus" :autoplay="autoplayStatus" loop
+			:src="videoList.videoUrl"></video>
 
 	</div>
 </template>
@@ -9,20 +10,47 @@
 export default {
 	name: '',
 	created() {
+
 	},
-	computed:{
-		preloadStatus(){
-        return this.preloads>=this.page-2? 'auto' :'none'
-		}
+	mounted() {
+
+
 	},
-	props: ['videoList','preloads','page'],
+	computed: {
+		preloadStatus() {
+			if (this.preloadStatusFlag == 'auto') {
+				return this.preloadStatusFlag
+			} else {
+				this.preloadStatusFlag = this.preloads <= this.page + 2 && this.preloads >= this.page - 2 ? 'auto' : 'none'
+				return this.preloadStatusFlag
+			}
+		},
+		autoplayStatus() {
+			
+			if (this.page == this.preloads) {
+				this.playStatus=true
+				console.log('autoplayStatus');
+				setTimeout(()=>{
+					this.$bus.$emit('videoInfo',this.videoList)
+				},50)
+				return true
+			} else {
+				this.playStatus=false
+				return false
+			}
+		},
+
+	},
+	props: ['videoList', 'preloads', 'page'],
 	data() {
 		return {
 			playStatus: false,
 			dblclick: false,
+			preloadStatusFlag: 'none',
 		}
 	},
 	methods: {
+		// 单击事件
 		singleClick() {
 			console.log('singleClick');
 			let video = this.$refs.videoList
@@ -35,9 +63,10 @@ export default {
 			}
 
 		},
+		// 单击与双击事件判断
 		click() {
 			this.dblclick = !this.dblclick
-               setTimeout(() => {
+			setTimeout(() => {
 				if (this.dblclick) {
 					// 单击
 					console.log('singleClick');
@@ -57,13 +86,14 @@ export default {
 			}, 300)
 
 		},
-
+		//    播放函数
 		videoPlay() {
 			let video = this.$refs.videoList
 			video.currentTime = 0;
 			video.play()
 			this.playStatus = true
 		},
+		// 暂停函数
 		videoPause() {
 			let video = this.$refs.videoList
 			video.pause()

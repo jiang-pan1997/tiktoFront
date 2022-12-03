@@ -1,20 +1,25 @@
 <template>
   <div id="app">
  <router-view></router-view>
-   <button v-if="btnStatus" @click="goIndex">去主页</button>
+   <Tab ></Tab>
   </div> 
 </template>
 
 <script>
-
+import Tab from '@/components/Tab.vue'
 export default {
   name:'',
+  components:{
+    Tab
+  },
   created(){
-//  this.goIndex()
+   localStorage.setItem('indexPage',0)
+   localStorage.removeItem('indexList')
   },
   data() {
     return {
-      btnStatus:true
+      btnStatus:true,
+      bgc:'',
     }
   },
   methods:{

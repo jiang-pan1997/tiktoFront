@@ -5,7 +5,7 @@
   >
       <van-swipe-item v-for="(item,index) in videoList" :key="item.id"  >
         <div class="video">
-          <video-play @doubleClick="doubleClick" :preloads="preloads" :page="index"   class="video" :videoList="item" ref="videoRef"></video-play>
+          <video-play @doubleClick="doubleClick" :preloads="preloads" :page="index" :pageIndex="preloads"   class="video" :videoList="item" ref="videoRef"></video-play>
         </div>
         <div class="left-box">
           <list-left :detail="item"></list-left>
@@ -36,14 +36,15 @@ export default {
   },
   mounted(){
     // this.$refs.videoRef[this.pageIndex || 0].videoPlay() 
+    // this.preloads=this.pageIndex
   },
-  props:['videoList','pageIndex'],
+  props:['videoList','pageIndex','indexActive'],
   data() {
     return {
       page:0,
       pageStartY:0,
       pageEndY:0,
-      preloads:0,
+      preloads:this.pageIndex
 
     }
   },
@@ -63,31 +64,6 @@ export default {
     onChange(index) {
       let timer=null
       console.log('index位置：'+index);
-      // console.log(index);
-      // console.log( this.$refs.videoRef.length);
-      // if(index==this.$refs.videoRef.length-3){
-      //     console.log('最后第三页');
-      //     this.getData()
-      //     this.$refs.Swipe.resize();
-      // }
-      // if(this.page<index){
-      //   // console.log(this.$refs.videoRef);
-      // this.$refs.videoRef[index].videoPlay()
-      // this.$refs.videoRef[index-1].videoPause()
-      // this.page=index
-      // console.log('向上翻页');
-      // }else{
-      // this.$refs.videoRef[index+1].videoPlay()
-      // this.$refs.videoRef[index].videoPause()
-      // this.page=index
-      // console.log('向下翻页');
-      // }
-
-      //   if(this.page==this.$refs.videoRef.length-4){
-      //     console.log('最后第三页');
-      //     this.getData()
-      //     this.$refs.Swipe.resize()
-      // }
       clearTimeout(timer)
 				timer = setTimeout(() => {
 					if (this.pageStartY > this.pageEndY) {
@@ -95,7 +71,6 @@ export default {
 						this.pageEndY = 0
       this.$refs.videoRef[index].videoPlay()
       this.$refs.videoRef[index-1].videoPause()
-      // this.$refs.Swipe.swipeTo(this.page+1)
             this.page=index
 						console.log('向上滑动');
            this.preloads=index
@@ -110,7 +85,10 @@ export default {
 						console.log('向下滑动');
 					}
 				}, 20)
-         localStorage.setItem('pageIndex',index)
+        if(this.indexActive){
+          localStorage.setItem('indexPage',index)
+          }
+         
     },
     // 屏幕双击事件处理
     doubleClick() {

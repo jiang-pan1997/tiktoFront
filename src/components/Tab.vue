@@ -1,40 +1,55 @@
 <template>
-	<div  class="tab">
-		<div class="tab-box">
+	<div  class="tab" :style="{backgroundColor:bgc}" >
+		<div class="tab-box" @click="goIndex" >
 			首页
 		</div>
 		<div class="tab-box" @click="goLikes" >
-			关注
+			喜欢
 		</div>
 		<div class="tab-box">
 			<div class="iconfont icon-jiahao_o icon-box  ">
 			</div>
 		</div>
 		
-		<div class="tab-box" @click="clean" >
-			消息
+		<div class="tab-box"  >
+			收藏
 		</div>
-		<div class="tab-box">
-			我的
+		<div class="tab-box" @click="goAuthor" >
+			作者
 		</div>
 	</div>
 </template>
 
 <script>
 	export default {
+		created(){
+         this.$bus.$on('videoInfo',(videoInfo)=>{
+            this.videoInfo=videoInfo
+		 })
+		},
 		data() {
 			return {
-				
+				videoInfo:{},
+				bgc:'',
 			}
 		},
 		methods: {
 			goLikes(){
 				localStorage.removeItem('videoList')
+				this.bgc='#000'
 				this.$router.push('/likes')
 			},
-			clean(){
-				localStorage.removeItem('indexList')
-			}
+			goIndex(){
+				this.bgc=''
+				this.$router.push('/index')
+			},
+			goAuthor(){
+			this.bgc='#000'
+			localStorage.removeItem('videoList')
+            this.$router.push({name:'author',params:{
+			     author:this.videoInfo.author
+		  }})
+		}
 		}
 	}
 </script>

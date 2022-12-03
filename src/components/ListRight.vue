@@ -62,7 +62,6 @@ export default {
           this.$router.push({name:'author',params:{
 			author:this.videoData.author
 		  }})
-			
 		}
 	}
 }

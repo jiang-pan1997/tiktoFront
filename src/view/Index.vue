@@ -1,8 +1,7 @@
 <template>
     <div class="index">
         <first-nav></first-nav>
-        <Tab></Tab>
-        <VideoList :videoList="videoList" :pageIndex="pageIndex" ></VideoList>
+        <VideoList :videoList="videoList" :indexActive="true"  :pageIndex="pageIndex" ></VideoList>
     </div>
 </template>
 
@@ -18,8 +17,10 @@ export default {
         VideoList
     },
     created() {
+        console.log('Index组件创建成功！');
         let result = JSON.parse(localStorage.getItem('indexList'))
-        let pageIndexNum=localStorage.getItem('pageIndex')
+        let pageIndexNum=localStorage.getItem('indexPage')
+        console.log(pageIndexNum==null);
         if (result == null || pageIndexNum==null ) {
             this.getData()
             this.pageIndex=0
@@ -38,9 +39,9 @@ export default {
     methods: {
         // 获取视频数据
         async getData() {
-            const { data: res } = await this.$http.get('/movie/geRandomData/50')
+            const { data: res } = await this.$http.get('/movie/geRandomData/10')
             this.videoList = res.data
-            localStorage.setItem('indexList', JSON.stringify(this.videoList))
+            localStorage.setItem('indexList', JSON.stringify(res.data))
 
         },
     }

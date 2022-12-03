@@ -25,26 +25,19 @@ export default {
     },
     methods:{
         goVideoPlay(index){
-   console.log(111);
-   this.$router.push({name:'play',params:{index}})
+        this.$router.push({name:'play',params:{index}})
         },
     },
 }
 </script>
 
 <style lang="less" scoped>
-.list {
-
-    width: 100%;
-    height: 600px;
-
-}
-
 ul {
     box-sizing: border-box;
     width: 100%;
     padding-top: 6px;
     padding-left: 6px;
+    padding-bottom: 50px;
 }
 
 
