@@ -1,22 +1,28 @@
 <template>
   <div id="app">
- <first-nav></first-nav>
- <Tab></Tab>
- <Index></Index>
-  </div>
+ <router-view></router-view>
+   <button v-if="btnStatus" @click="goIndex">去主页</button>
+  </div> 
 </template>
 
 <script>
-import Tab from '@/components/Tab.vue'
-import FirstNav from '@/components/FirstNav.vue'
-import Index from '@/view/Index.vue'
+
 export default {
   name:'',
-  components:{
-    Tab,
-    FirstNav,
-    Index,
+  created(){
+//  this.goIndex()
   },
+  data() {
+    return {
+      btnStatus:true
+    }
+  },
+  methods:{
+    goIndex(){
+      this.$router.push('/index')
+      this.btnStatus=false
+    }
+  }
 }
 </script>
 

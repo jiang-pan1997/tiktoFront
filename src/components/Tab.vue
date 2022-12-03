@@ -3,7 +3,7 @@
 		<div class="tab-box">
 			首页
 		</div>
-		<div class="tab-box">
+		<div class="tab-box" @click="goLikes" >
 			关注
 		</div>
 		<div class="tab-box">
@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		
-		<div class="tab-box">
+		<div class="tab-box" @click="clean" >
 			消息
 		</div>
 		<div class="tab-box">
@@ -28,7 +28,13 @@
 			}
 		},
 		methods: {
-			
+			goLikes(){
+				localStorage.removeItem('videoList')
+				this.$router.push('/likes')
+			},
+			clean(){
+				localStorage.removeItem('indexList')
+			}
 		}
 	}
 </script>
