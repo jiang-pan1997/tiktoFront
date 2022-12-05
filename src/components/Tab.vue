@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		
-		<div class="tab-box"  >
+		<div class="tab-box"   @click="goCollected"  >
 			收藏
 		</div>
 		<div class="tab-box" @click="goAuthor" >
@@ -24,6 +24,7 @@
 	export default {
 		created(){
          this.$bus.$on('videoInfo',(videoInfo)=>{
+			//   console.log('videoInfo')
             this.videoInfo=videoInfo
 		 })
 		},
@@ -49,6 +50,11 @@
             this.$router.push({name:'author',params:{
 			     author:this.videoInfo.author
 		  }})
+		},
+		goCollected(){
+			localStorage.removeItem('videoList')
+			this.bgc='#000'
+			this.$router.push('/collected')
 		}
 		}
 	}

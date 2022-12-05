@@ -9,11 +9,7 @@
 		<div class=" iconfont icon-aixin right-box" :style="{ color: videoData.videoLike == 1 ? 'red' : '' }"
 			@click="changeColor(videoData.videoLike)"></div>
 		<div class="number">{{ videoData.likes / 10000 > 1 ? videoData.likes / 10000 + 'w' : videoData.likes }}</div>
-		<div class=" iconfont icon-pinglun right-box "></div>
-		<div class="number"></div>
-		<div class=" iconfont icon-fenxiang right-box ">
-		</div>
-		<div class="number"></div>
+		<div class=" iconfont icon-shoucang1 right-box " :style="{color: videoData.videoCollected == 1 ? '#FBB70F' : '' }"  @click="changeCollected(videoData.videoCollected)"  ></div>
 		<div class="around">
 			<img class="img" src="../../public/images/2.png" alt="" />
 		</div>
@@ -31,7 +27,8 @@ export default {
 	data() {
 		return {
 			show: true,
-			color: ''
+			color: '',
+			collectColor:''
 		}
 	},
 	methods: {
@@ -46,14 +43,29 @@ export default {
 				this.videoData.videoLike = 1
 				this.setVideoLike(1)
 			}
-			this.color = this.color == '' ? 'red' : ''
 		},
 		change() {
 			this.color = 'red'
 		},
+		changeCollected(collected){
+			console.log(collected);
+			if (collected == 1) {
+				this.videoData.videoCollected = 0
+				this.setVideoCollected(0)
+			} else {
+				this.videoData.videoCollected = 1
+				this.setVideoCollected(1)
+			}
+		},
 		// 修改视频喜欢状态
 		async setVideoLike(like) {
 			const { data: res } = await this.$http.post(`/movie/setVideoLike/${this.videoData.id}/${like}`)
+			
+		},
+
+		// 修改视频收藏状态
+				async setVideoCollected(collected) {
+			const { data: res } = await this.$http.post(`/movie/setVideoCollected/${this.videoData.id}/${collected}`)
 		},
 
 		goAuthor(){

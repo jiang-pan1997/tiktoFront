@@ -1,24 +1,38 @@
 <template>
     <div class="author">
-        <h2>作者列表</h2>
-        <List :videoList="videoList"></List>
+        <Header :author="author" @getAuthorLike="getAuthorLike" @getData="getData" @getAuthorCollected="getAuthorCollected"  ></Header>
+        <List :videoList="videoList" ref="ListRef" ></List>
     </div>
 </template>
 
 <script>
 import List from '@/components/List.vue'
+import Header from '@/components/Header.vue'
 export default {
     name: 'Author',
     components: {
-        List
+        List,
+        Header
     },
     created() {
-        this.getData()
+            this.getData()
+           
+    },
+    computed:{
+    author(){
+        console.log(this.$route.params.author);
+        if(this.$route.params.author==undefined){
+            return  localStorage.getItem('author')
+        }else{
+        localStorage.setItem('author',this.$route.params.author)
+         return this.$route.params.author
+        }
+      
+    }
     },
     data() {
         return {
             videoList: [],
-            author:this.$route.params.author,
         }
     },
     methods: {
@@ -27,7 +41,21 @@ export default {
             let { data: res }  = await this.$http.get(`/movie/getAuthor/${this.author}`)
             this.videoList = res.data
             localStorage.setItem('videoList',JSON.stringify(res.data))
+            this.$refs.ListRef.goPageTop()
         },
+        async getAuthorLike(){
+             const {data:res}= await this.$http.get(`/movie/getAuthorLike/${this.author}`)
+             this.videoList=res.data
+             localStorage.setItem('videoList',JSON.stringify(res.data))
+             this.$refs.ListRef.goPageTop()
+            },
+            async getAuthorCollected(){;
+             const {data:res}= await this.$http.get(`/movie/getAuthorCollected/${this.author}`)
+             this.videoList=res.data
+             localStorage.setItem('videoList',JSON.stringify(res.data))
+             this.$refs.ListRef.goPageTop()
+            },
+            
     }
 }
 </script>

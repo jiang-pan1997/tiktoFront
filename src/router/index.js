@@ -1,13 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import Index from '@/view/Index.vue'
-// import Author from '@/view/Author.vue'
-// import Play from '@/view/Play.vue'
-// import Likes from '@/view/Likes.vue'
 import Index from '../view/Index.vue'
 import Author from '../view/Author.vue'
 import Play from '../view/Play.vue'
 import Likes from '../view/Likes.vue'
+import Collected from '@/view/Collected'
+import VideoAdd from '@/view/VideoAdd'
 Vue.use(VueRouter)
 
 const routes = [
@@ -36,10 +34,20 @@ const routes = [
     name:'likes',
     component:Likes
    },
+   {
+    path:'/collected',
+    name:'collected',
+    component:Collected
+   },
+   {
+    path:'/add',
+    name:'add',
+    component:VideoAdd
+   },
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })

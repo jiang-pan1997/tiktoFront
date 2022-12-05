@@ -1,16 +1,16 @@
 <template>
-    <div class="likes">
-        <Header :author="'喜欢列表'" ></Header>
+    <div class="collected" >
+        <Header :author="'收藏列表'"></Header>
         <List  :videoList="videoList"></List>
     </div>
 </template>
 
 <script>
+import Header from '@/components/Header.vue'
 import List from '@/components/List.vue'
 import Tab from '@/components/Tab.vue'
-import Header from '@/components/Header.vue'
     export default {
-        name: 'Likes',
+        name: 'Collected',
     components: {
         List,
         Tab,
@@ -25,7 +25,6 @@ import Header from '@/components/Header.vue'
         else {
             this.videoList = result
         }
-        // this.getData()
     },
     data() {
         return {
@@ -36,7 +35,7 @@ import Header from '@/components/Header.vue'
     methods:{
             // 获取视频数据
             async getData() {
-            let { data: res }  = await this.$http.get('/movie/getVideoLike/1')
+            let { data: res }  = await this.$http.get('/movie/getVideoCollected/1')
             this.videoList = res.data
             localStorage.setItem('videoList',JSON.stringify(res.data))
         },
@@ -45,7 +44,7 @@ import Header from '@/components/Header.vue'
 </script>
 
 <style lang="less" scoped>
-.list{
+.collected{
     margin-bottom: 50px;
 }
 h2{

@@ -1,7 +1,9 @@
 <template>
 	<div class="videoPlayer" @click="click">
-		<video class="video" ref="videoList" :preload="preloadStatus" :autoplay="autoplayStatus" loop
-			:src="videoList.videoUrl"></video>
+		<video class="video" ref="videoList" :preload="preloadStatus"   x5-video-player-type="h5"  :poster="videoList.imgUrl" webkit-playsinline="true" :autoplay="autoplayStatus" loop
+    x-webkit-airplay="true"
+    playsinline="true"
+    x5-video-player-fullscreen="false" :src="videoList.videoUrl"></video>
 
 	</div>
 </template>
@@ -18,24 +20,24 @@ export default {
 	},
 	computed: {
 		preloadStatus() {
-			if (this.preloadStatusFlag == 'auto') {
+			if (this.preloadStatusFlag == 'metadata') {
 				return this.preloadStatusFlag
 			} else {
-				this.preloadStatusFlag = this.preloads <= this.page + 2 && this.preloads >= this.page - 2 ? 'auto' : 'none'
+				// this.preloadStatusFlag =this.preloads >= this.page - 10 ? 'metadata' : 'none'
+				this.preloadStatusFlag = this.preloads <= this.page + 5 && this.preloads >= this.page - 5 ? 'metadata' : 'none'
 				return this.preloadStatusFlag
 			}
 		},
 		autoplayStatus() {
-			
 			if (this.page == this.preloads) {
-				this.playStatus=true
-				console.log('autoplayStatus');
-				setTimeout(()=>{
-					this.$bus.$emit('videoInfo',this.videoList)
-				},50)
+				this.playStatus = true
+				// console.log('autoplayStatus');
+				setTimeout(() => {
+					this.$bus.$emit('videoInfo', this.videoList)
+				}, 50)
 				return true
 			} else {
-				this.playStatus=false
+				this.playStatus = false
 				return false
 			}
 		},
@@ -115,6 +117,7 @@ export default {
 .video {
 	width: 100%;
 	height: 100%;
+	/* object-fit: fill; */
 	/* object-fit: fill; */
 	/* top: 0;
 		left: 0; */
