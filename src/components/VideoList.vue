@@ -1,11 +1,11 @@
 <template>
   <div class="index" @touchstart="touchStart" @touchend="touchEnd">
-    <van-swipe ref="Swipe" style="height: 100%;" :show-indicators="false"  :duration="duration" :initial-swipe="preloads" vertical
-      @change="onChange">
+    <van-swipe ref="Swipe" style="height: 100%;" :show-indicators="false" :duration="duration" :initial-swipe="preloads"
+      vertical @change="onChange">
       <van-swipe-item v-for="(item, index) in videoList" :key="item.id">
         <div class="video">
-          <video-play @doubleClick="doubleClick" :preloads="preloads" :page="index" :pageIndex="preloads" class="video"
-            :videoList="item" ref="videoRef"></video-play>
+          <video-play @doubleClick="doubleClick" :preloads="preloads" :windowsHeight="windowsHeight" :page="index"
+            :pageIndex="preloads" class="video" :videoList="item" ref="videoRef"></video-play>
         </div>
         <div class="left-box">
           <list-left :detail="item"></list-left>
@@ -38,14 +38,15 @@ export default {
     // this.$refs.videoRef[this.pageIndex || 0].videoPlay() 
     // this.preloads=this.pageIndex
   },
-  props: ['videoList', 'pageIndex', 'indexActive'],
+  props: ['videoList', 'pageIndex', 'indexActive',],
   data() {
     return {
       page: 0,
       pageStartY: 0,
       pageEndY: 0,
       preloads: this.pageIndex,
-      duration:500,
+      duration: 500,
+      windowsHeight: window.innerHeight,
 
     }
   },
@@ -63,24 +64,38 @@ export default {
 
     // swiper切换触发事件
     onChange(index) {
-    
-      if (index > this.$refs.videoRef.length - 3 && this.indexActive ) {
-        console.log('index位置：' + index);
-        this.preloads = index
-        // this.duration=0
-        for(let i=0;i< this.$refs.videoRef.length;i++){
-          this.$refs.videoRef[index-1].videoPause()
-        }
-        this.$bus.$emit('getNewVideo')
-       setTimeout(() => {
-        this.$refs.Swipe.swipeTo(index)
-        this.duration=500
-        this.$refs.videoRef[index].videoPlay()
-       }, 500);
-        //  this.pageIndex=this.$refs.videoRef.length-2
-      }else{
-      let timer = null
       console.log('index位置：' + index);
+      // //  翻页请求数据
+      // if (index > this.$refs.videoRef.length - 3 && this.indexActive ) {
+      //   // console.log('index位置：' + index);
+      //   this.preloads = index
+      //   // this.duration=0
+      //   for(let i=0;i< this.$refs.videoRef.length;i++){
+      //     this.$refs.videoRef[index-1].videoPause()
+      //   }
+      //   this.$bus.$emit('getNewVideo')
+      //  setTimeout(() => {
+      //   this.$refs.Swipe.swipeTo(index)
+      //   this.duration=500
+      //   this.$refs.videoRef[index].videoPlay()
+      //  }, 500);
+      //   //  this.pageIndex=this.$refs.videoRef.length-2
+      // }
+
+
+      //  判断是否在第一页，获者在最后一页
+      if (this.$refs.videoRef.length - 1 == index || index == 0) {
+        for (let i = 0; i < this.$refs.videoRef.length; i++) {
+          this.$refs.videoRef[i].videoPause()
+        }
+        this.$refs.videoRef[index].videoPlay()
+        this.page = index
+        // this.preloads = index  
+        return
+      }
+
+      let timer = null
+
       clearTimeout(timer)
       timer = setTimeout(() => {
         if (this.pageStartY > this.pageEndY) {
@@ -102,10 +117,18 @@ export default {
           console.log('向下滑动');
         }
       }, 20)
+      //  翻页请求数据
+      if (index > this.$refs.videoRef.length - 3 && this.indexActive) {
+        // console.log('index位置：' + index);
+        setTimeout(() => {
+          this.preloads = index
+          this.$bus.$emit('getNewVideo')
+        }, 1000);
+      }
+
       if (this.indexActive) {
         localStorage.setItem('indexPage', index)
       }
-    }
     },
     // 屏幕双击事件处理
     doubleClick() {
@@ -138,14 +161,14 @@ export default {
 .left-box {
   z-index: 20;
   position: absolute;
-  bottom: 50px;
+  bottom: 60px;
   left: 10px;
 }
 
 .right-box {
   z-index: 30;
   position: absolute;
-  bottom: 50px;
+  bottom: 60px;
   right: 10px;
 }
 </style>

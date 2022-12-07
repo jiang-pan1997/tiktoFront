@@ -65,7 +65,7 @@
 	 position: fixed;
 	 left: 0;
 	 bottom: 0;
-	 height: 50px;
+	 height: 60px;
 	 width: 100%;
 	 z-index: 20;
     //  background: #000;
@@ -74,10 +74,10 @@
  .tab-box{
 	 float: left;
 	 width: 20%;
-	 height: 50px;
+	 height: 60px;
 	 color: #FFFFFF;
 	 text-align: center;
-	 line-height: 50px;
+	 line-height: 60px;
 	 
  }
 @font-face {
@@ -111,13 +111,14 @@
  
  .icon-box{
 	 width: 70%;
-	 height: 35px;
+	 height: 40px;
+	 margin: auto;
 	 background-color: #FFFFFF;
 	 color: #000;
 	 margin: 7.5px 15%;
-	 line-height: 35px;
+	 line-height: 40px;
 	 border-radius: 10px;
-	 font-size: 20px;
+	 font-size: 30px;
  }
  
 </style>

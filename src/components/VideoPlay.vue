@@ -1,6 +1,7 @@
 <template>
 	<div class="videoPlayer" @click="click">
-		<video class="video" ref="videoList" :preload="preloadStatus"   x5-video-player-type="h5"  :poster="videoList.imgUrl" webkit-playsinline="true" :autoplay="autoplayStatus" loop
+		<video class="video" ref="videoList" :style="{height:windowsHeight-60+'px'}" :preload="preloadStatus"   x5-video-player-type="h5"  
+		:poster="videoList.imgUrl" webkit-playsinline="true" :autoplay="autoplayStatus" loop
     x-webkit-airplay="true"
     playsinline="true"
     x5-video-player-fullscreen="false" :src="videoList.videoUrl"></video>
@@ -43,7 +44,7 @@ export default {
 		},
 
 	},
-	props: ['videoList', 'preloads', 'page'],
+	props: ['videoList', 'preloads', 'page','windowsHeight'],
 	data() {
 		return {
 			playStatus: false,
@@ -109,15 +110,15 @@ export default {
 .videoPlayer {
 	position: relative;
 	width: 100%;
-	height: 100%;
+	height:100%;
 	z-index: 19;
 	/* margin-bottom: 50px; */
 }
 
 .video {
 	width: 100%;
-	height: 100%;
-	/* object-fit: fill; */
+	/* height: 98%; */
+	object-fit: cover;
 	/* object-fit: fill; */
 	/* top: 0;
 		left: 0; */
