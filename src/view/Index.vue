@@ -33,6 +33,7 @@ export default {
             console.log('getNewVideo...............................');
             this.getData()
         })
+        this.$bus.$emit('tabShow',{tabShow:true,select:0})
 
     },
     data() {
@@ -45,8 +46,6 @@ export default {
         // 获取视频数据
         async getData() {
             const { data: res } = await this.$http.get('/movie/geRandomData/10')
-            // let result = this.uniqueFunc(res.data)
-            // console.log(result);
             let result = [...this.videoList, ...res.data]
             this.videoList = this.uniqueFunc(result)
             localStorage.setItem('indexList', JSON.stringify(this.videoList))

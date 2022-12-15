@@ -64,7 +64,7 @@ export default {
 
     // swiper切换触发事件
     onChange(index) {
-      console.log('index位置：' + index);
+
       // //  翻页请求数据
       // if (index > this.$refs.videoRef.length - 3 && this.indexActive ) {
       //   // console.log('index位置：' + index);

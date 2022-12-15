@@ -18,13 +18,13 @@ import Tab from '@/components/Tab.vue'
     },
     created() {
         let result = JSON.parse(localStorage.getItem('videoList'))
-        console.log('result:'+result);
         if (result == null) {
             this.getData()
         }
         else {
             this.videoList = result
         }
+        this.$bus.$emit('tabShow',{tabShow:true,select:2})
     },
     data() {
         return {

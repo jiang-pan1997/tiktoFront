@@ -16,11 +16,11 @@ export default {
     },
     created() {
             this.getData()
+            this.$bus.$emit('tabShow',{tabShow:true,select:3})
            
     },
     computed:{
     author(){
-        console.log(this.$route.params.author);
         if(this.$route.params.author==undefined){
             return  localStorage.getItem('author')
         }else{

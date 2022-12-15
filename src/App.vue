@@ -1,7 +1,7 @@
 <template>
   <div id="app">
  <router-view></router-view>
-   <Tab ></Tab>
+   <Tab v-show="tabShow" :select="select" ></Tab>
   </div> 
 </template>
 
@@ -15,11 +15,17 @@ export default {
   created(){
    localStorage.setItem('indexPage',0)
    localStorage.removeItem('indexList')
+   this.$bus.$on('tabShow',({tabShow,select})=>{
+    this.tabShow=tabShow,
+    this.select=select
+   })
   },
   data() {
     return {
       btnStatus:true,
       bgc:'',
+      tabShow:true,
+      select:0,
     }
   },
   methods:{

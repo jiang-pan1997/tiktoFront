@@ -18,14 +18,13 @@ import Header from '@/components/Header.vue'
     },
     created() {
         let result = JSON.parse(localStorage.getItem('videoList'))
-        console.log('result:'+result);
         if (result == null) {
             this.getData()
         }
         else {
             this.videoList = result
         }
-        // this.getData()
+        this.$bus.$emit('tabShow',{tabShow:true,select:1})
     },
     data() {
         return {

@@ -1,7 +1,7 @@
 <template>
 	<div class="listright">
 		<div class="author-img">
-			<img class="img" src="../../public/images/1.jpeg" mode="show"  @click="goAuthor(videoData.author)" />
+			<img class="img" :src="videoData.headPortrait" mode="show"  @click="goAuthor(videoData.author)" />
 			<div class="iconfont icon-jiahao_o add " v-show="show" @click="hide">
 
 			</div>
@@ -20,7 +20,8 @@
 export default {
 	computed: {
 		videoData() {
-			return this.detail || {}
+		return this.detail || {}
+	    
 		}
 	},
 	props: ['detail'],

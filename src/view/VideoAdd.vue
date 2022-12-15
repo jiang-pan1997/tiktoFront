@@ -18,16 +18,15 @@
         </div>
 
         <button type="submit" class="btn btn-primary" id="btn" @click.prevent="Add" > 添加</button>
-
+       <br>
+       <br>
         <div class="form-group">
-            <label for="novel_file">请上传视频文件：</label>
-
-            <input type="file" name="" id="videoData" @change="getVideoDataReleaseTime">
-            <button @click.prevent="PostDataReleaseTime">发送视频时长数据</button>
-
-
-            <!-- <input type="file" name="" id="videoData" @change="getVideoData">
-            <button @click.prevent="PostData">发送视频时长数据</button> -->
+            <label for="novel_file">请上传作者头像：</label>
+            <input type="file" id="AuthorImg" multiple="multiple" name="img" @change="uploadAuthorImg" >
+            <label for="novel_file">请上传视频资料文件：</label>
+            <input type="file" name="" id="videoData" @change="getVideoData">
+            <br>
+            <button @click.prevent="PostData">发送视频时长数据</button>
         </div>
 
 
@@ -39,6 +38,9 @@
 import Axios from 'axios'
 export default {
     name: 'VideoAdd',
+    created(){
+        this.$bus.$emit('tabShow',{tabShow:false})
+    },
     data() {
         return {
             novelImgPosition: '',
@@ -55,7 +57,6 @@ export default {
         }
     },
     methods: {
-
 
         matching() {
             var imgarr = document.getElementById('file_img').files
@@ -215,6 +216,20 @@ export default {
             // console.log( this.videoData);
         },
 
+        async PostVideoData(likes, author, name) {
+            var data = new URLSearchParams();
+            data.append("likes", likes);
+            data.append("author", author);
+            data.append("name", name);
+            data.append("headPortrait", this.imgUrl);
+            const { data: res } = await Axios.post(
+                "http://study-everyday.cn:9696/movie/update",
+                // "http://localhost:9696/movie/update",
+                data
+            );
+            console.log(res);
+        },
+
         getVideoDataReleaseTime() {
             var arr = [];
             let videoTemp = ''
@@ -241,18 +256,7 @@ export default {
             // console.log( this.videoData);
         },
 
-        async PostVideoData(likes, author, name) {
-            var data = new URLSearchParams();
-            data.append("likes", likes);
-            data.append("author", author);
-            data.append("name", name);
-            const { data: res } = await Axios.post(
-                // "http://study-everyday.cn:9696/movie/update",
-                "http://localhost:9696/movie/update",
-                data
-            );
-            console.log(res);
-        },
+
         
 
             async PostVideoDataReleaseTime(name, releaseTime) {
@@ -260,8 +264,8 @@ export default {
             data.append("name", name);
             data.append("releaseTime", releaseTime);
             const { data: res } = await Axios.post(
-                "http://study-everyday.cn:9696/movie/update",
-                // "http://localhost:9696/movie/update",
+                // "http://study-everyday.cn:9696/movie/update",
+                "http://localhost:9696/movie/update",
                 data
             );
             console.log(res);
@@ -286,6 +290,28 @@ export default {
                     dataArr[i].name,
                     dataArr[i].releaseTime,            
                 );
+            }
+        },
+
+        async uploadAuthorImg() {
+            var formData = new FormData(); //需要用到formData
+            formData.append("img", document.getElementById("AuthorImg").files[0]
+            ); //添加选择的文件 key值为file  
+            //   const { data: res } = await Axios.post("http://localhost:8000/storageServices/picture/upload",
+            const { data: res } = await Axios.post("http://study-everyday.cn:8000/storageServices/picture/upload",
+                formData,
+                {
+                    "Content-type": "multipart/form-data",
+                }
+            );
+            if (res.code == 1) {
+                console.log(res.data);
+                this.imgUrl = res.data.originalImgUrl;
+                console.log('图片资源写入成功！');
+                return res.data
+            }
+            else {
+                console.log('图片资源写入失败！');
             }
         },
 

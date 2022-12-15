@@ -6,50 +6,98 @@ import Play from '../view/Play.vue'
 import Likes from '../view/Likes.vue'
 import Collected from '@/view/Collected'
 import VideoAdd from '@/view/VideoAdd'
+import Login from '@/view/MyLogin'
+import AuthorAdd from '@/view/AuthorAdd'
+import AuthorList from '@/view/AuthorList'
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
     // redirect: '/index',
-    component:Index
+    component:Index,
+
   },
   {
    path:'/index',
    name:'index',
-   component:Index
+   component:Index,
+
   },
   {
     path:'/author',
     name:'author',
-    component:Author
+    component:Author,
+
    },
    {
     path:'/play',
     name:'play',
-    component:Play
+    component:Play,
+
    },
    {
     path:'/likes',
     name:'likes',
-    component:Likes
+    component:Likes,
+
    },
    {
     path:'/collected',
     name:'collected',
-    component:Collected
+    component:Collected,
+
    },
    {
     path:'/add',
     name:'add',
-    component:VideoAdd
+    component:VideoAdd,
+
+   },
+   {
+    path:'/login',
+    name:'login',
+    component:Login,
+   },
+   {
+    path:'/authorAdd',
+    name:'authorAdd',
+    component:AuthorAdd,
+
+   },
+   {
+    path:'/authorList',
+    name:'authorList',
+    component:AuthorList,
    },
 ]
+
+
+
 
 const router = new VueRouter({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach(async (to,from,next)=>{
+  if(to.path==='/login')
+      return next()
+    if(to.path!='/login')
+    { 
+    let token =  localStorage.getItem('token')
+    if(!token)
+    next('/login')
+    }
+    next()  
+    
+})
+
+const originalPush = VueRouter.prototype.push
+
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 export default router

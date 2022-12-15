@@ -14,6 +14,7 @@ export default {
     created() {
         let result = JSON.parse(localStorage.getItem('videoList'))
         this.videoList = result
+        this.$bus.$emit('tabShow',{tabShow:false})
     },
     data() {
         return {
