@@ -24,13 +24,14 @@
             <label for="novel_file">请上传作者头像：</label>
             <input type="file" id="AuthorImg" multiple="multiple" name="img" @change="uploadAuthorImg" >
             <label for="novel_file">请上传视频资料文件：</label>
-            <input type="file" name="" id="videoData" @change="getVideoData">
+            <input type="file" name="" id="videoData" @change="getVideoDataReleaseTime">
             <br>
-            <button @click.prevent="PostData">发送视频时长数据</button>
+            <button @click.prevent="PostDataReleaseTime">发送视频时长数据</button>
         </div>
-
-
         <a href="#" @click.prevent="goBack">返回视频主界面</a>
+
+        <button @click.prevent="PostComment">上传评论数据</button>
+
     </div>
 </template>
 
@@ -54,6 +55,7 @@ export default {
             videoUrl: "",
             duration: "",
             name: '',
+            pinglun:[]
         }
     },
     methods: {
@@ -84,8 +86,8 @@ export default {
                 "img",
                 document.getElementById("file_img").files[index]
             ); //添加选择的文件 key值为file  
-              const { data: res } = await Axios.post("http://localhost:8000/storageServices/picture/upload",
-            // const { data: res } = await Axios.post("http://study-everyday.cn:8000/storageServices/picture/upload",
+            //   const { data: res } = await Axios.post("http://localhost:8000/storageServices/picture/upload",
+            const { data: res } = await Axios.post("http://study-everyday.cn:8000/storageServices/picture/upload",
                 formData,
                 {
                     "Content-type": "multipart/form-data",
@@ -119,8 +121,8 @@ export default {
                 "video",
                 document.getElementById("file_video").files[index]
             ); //添加选择的文件 key值为file
-              const { data: res } = await Axios.post("http://localhost:8000/storageServices/video/upload",
-            // const { data: res } = await Axios.post("http://study-everyday.cn:8000/storageServices/video/upload",
+            //   const { data: res } = await Axios.post("http://localhost:8000/storageServices/video/upload",
+            const { data: res } = await Axios.post("http://study-everyday.cn:8000/storageServices/video/upload",
                 formData,
                 {
                     "Content-type": "multipart/form-data",
@@ -154,8 +156,8 @@ export default {
             params.append("author", "jiangpan");
             params.append("title", "");
             const { data: res } = await Axios.post(
-                // "http://study-everyday.cn:9696/movie",
-                "http://localhost:9696/movie",
+                "http://study-everyday.cn:9696/movie",
+                // "http://localhost:9696/movie",
                 params
             );
             if (res.code == 1) {
@@ -237,23 +239,65 @@ export default {
             reader.readAsText(document.getElementById("videoData").files[0], "utf8"); // input.files[0]为第一个文件
             reader.onload = () => {
                 let content = reader.result;
-                content = content.split("\n");
+                content = content.split("\r\n");
                 // console.log(content[3]);
-
-                for (let i = 0; i < content.length; i++) {
-                    videoTemp = content[i].split("\t");
-                    let obj = {
-                        name: videoTemp[0],
-                        releaseTime: videoTemp[1],
-                    };
-                    arr.push(obj);
-                    console.log(arr);
-                    this.videoData = arr;
-                    console.log(this.videoData);
-                }
-
+                // console.log(content);
+                this.pinglun=content
+                // for (let i = 0; i < content.length; i++) {
+                //     videoTemp = content[i].split("\t");
+                //     let obj = {
+                //         name: videoTemp[0],
+                //         releaseTime: videoTemp[1],
+                //     };
+                //     arr.push(obj);
+                //     console.log(arr);
+                //     this.videoData = arr;
+                //     console.log(this.videoData);
+                // }
+              this.transformation()
             };
             // console.log( this.videoData);
+           
+        },
+
+        transformation(){
+            var arr=[{}]
+        for(let i=0;i<this.pinglun.length;i++){
+            const obj1 = JSON.parse(this.pinglun[i]);     //https://p3-pc.douyinpic.com/aweme/100x100/
+            
+            obj1.avatar_uri= 'https://p3-pc.douyinpic.com/aweme/100x100/'+obj1.avatar_uri
+            // arr.push(obj1)
+            console.log(obj1);
+            // uploadComment(obj1)
+            this.uploadComment(obj1)
+        }
+           console.log(arr);
+        },
+
+
+      async  PostComment(){
+          for(let i=0;i<this.pinglun.length;i++){
+            this.uploadComment(this.pinglun[i])
+          }
+
+        },
+
+      async  uploadComment(data){
+        console.log(data);
+         const params = new URLSearchParams();   
+        params.append("avatarUri", data.avatar_uri);
+        params.append("cid", data.cid);
+        params.append("createTime", data.create_time);
+        params.append("customVerify", data.custom_verify);
+        params.append("diggCount", data.digg_count);
+        params.append("ipLabel", data.ip_label);
+        params.append("nickname", data.nickname);
+        params.append("replyCommentTotal", data.reply_comment_total);
+        params.append("text", data.text);
+        const { data: res } = await Axios.post(
+                "http://localhost:9696/comment/upload",
+                params
+            );
         },
 
 
@@ -264,8 +308,8 @@ export default {
             data.append("name", name);
             data.append("releaseTime", releaseTime);
             const { data: res } = await Axios.post(
-                // "http://study-everyday.cn:9696/movie/update",
-                "http://localhost:9696/movie/update",
+                "http://study-everyday.cn:9696/movie/update",
+                // "http://localhost:9696/movie/update",
                 data
             );
             console.log(res);

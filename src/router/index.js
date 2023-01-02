@@ -9,6 +9,7 @@ import VideoAdd from '@/view/VideoAdd'
 import Login from '@/view/MyLogin'
 import AuthorAdd from '@/view/AuthorAdd'
 import AuthorList from '@/view/AuthorList'
+import Home from '@/view/Home.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -69,6 +70,11 @@ const routes = [
     path:'/authorList',
     name:'authorList',
     component:AuthorList,
+   },
+   {
+    path:'/home',
+    name:'home',
+    component:Home,
    },
 ]
 

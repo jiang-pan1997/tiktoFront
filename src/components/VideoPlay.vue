@@ -24,8 +24,6 @@ export default {
 			if (this.preloadStatusFlag == 'metadata') {
 				return this.preloadStatusFlag
 			} else {
-				// this.preloadStatusFlag =this.preloads >= this.page - 10 ? 'metadata' : 'none'
-				// this.preloadStatusFlag = this.preloads <= this.page + 5 && this.preloads >= this.page - 5 ? 'metadata' : 'none'
 				this.preloadStatusFlag = this.preloads <= this.page&& this.preloads >= this.page ? 'none' : 'none'
 				return this.preloadStatusFlag
 			}

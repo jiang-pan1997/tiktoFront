@@ -2,26 +2,26 @@
     <div class="headerContainer">
 
         <div class="header">
-            <div class="return-header  ">&nbsp;<span class="iconfont icon-xiangzuojiantou return-header "></span></div>
+            <div class="return-header" @click="goHistory" >&nbsp;<span class="iconfont icon-xiangzuojiantou return-header "></span></div>
             <div class="author">
                 <div class="user-nav">
-                    <div class="imgContainer"><img :src="authorInfo.headPortrait!=null?authorInfo.headPortrait:require('../../public/images/1.jpeg')"></div>
+                    <div class="imgContainer"><img :src="authorInfo.headPortrait!=null?authorInfo.headPortrait:require('../../public/images/1.jpg')"></div>
+                </div>
+                <div class="user-nav" @click="goAuthorList"  >
+                    <span class="title">{{author!="我的"?'作品':'关注'}}</span>
+                    <span class="num">{{total}}</span>
+                </div>
+                <div class="user-nav" >
+                    <span class="title">喜欢</span>
+                    <span class="num">{{likes}}</span>
                 </div>
                 <div class="user-nav">
-                    <span class="title">获赞</span>
-                    <span class="num">20012</span>
-                </div>
-                <div class="user-nav" @click="goAuthorList" >
-                    <span class="title">关注</span>
-                    <span class="num">22345</span>
-                </div>
-                <div class="user-nav">
-                    <span class="title">粉丝</span>
-                    <span class="num">19976</span>
+                    <span class="title">收藏</span>
+                    <span class="num">{{collected}}</span>
                 </div>
             </div>
             <div class="name" >{{author}}</div>
-            <div class="option">
+            <div class="option"  >
                 <div class="bar" ref="WorksRef" @click="getWorks">作品</div>
                 <div class="bar" ref="likesRef" @click="getLikes">喜欢</div>
                 <div class="bar" ref="collectedRef" @click="getcollected">收藏</div>
@@ -36,13 +36,21 @@
 export default {
     mounted() {
         this.$refs.WorksRef.style.borderBottom = "2px solid #000";
-        this.getAuthorInfo()
+        if(this.author!='我的'){
+          this.getAuthorInfo()
+        }else{
+        this.getUserInfo()
+        }
+       
+        
     },
     props: ['author'],
     data() {
         return {
-            videoList: [],
             authorInfo:{},
+            total:0,
+            likes:0,
+            collected:0,
         }
     },
     methods: {
@@ -74,11 +82,31 @@ export default {
             if(res.data==null){
                 return
             }
-            this.authorInfo=res.data
+            this.authorInfo=res.data.authorInfo
+            this.total=res.data.total
+            this.likes=res.data.likes
+            this.collected=res.data.collected
+         }
+        },
+              async  getUserInfo(){
+         let {data:res}= await this.$http.get(`/movie//geUserInfo`)
+         if(res.code==1){
+            if(res.data==null){
+                return
+            }
+               this.total=res.data.authorTotal
+            this.likes=res.data.likes
+            this.collected=res.data.collected
          }
         },
         goAuthorList(){
+            if(this.author!='我的'){
+                return
+            }
             this.$router.push('/authorList')
+        },
+        goHistory(){
+            this.$router.go(-1)
         }
     }
 }

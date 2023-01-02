@@ -65,37 +65,16 @@ export default {
     // swiper切换触发事件
     onChange(index) {
 
-      // //  翻页请求数据
-      // if (index > this.$refs.videoRef.length - 3 && this.indexActive ) {
-      //   // console.log('index位置：' + index);
-      //   this.preloads = index
-      //   // this.duration=0
-      //   for(let i=0;i< this.$refs.videoRef.length;i++){
-      //     this.$refs.videoRef[index-1].videoPause()
-      //   }
-      //   this.$bus.$emit('getNewVideo')
-      //  setTimeout(() => {
-      //   this.$refs.Swipe.swipeTo(index)
-      //   this.duration=500
-      //   this.$refs.videoRef[index].videoPlay()
-      //  }, 500);
-      //   //  this.pageIndex=this.$refs.videoRef.length-2
-      // }
-
-
-      //  判断是否在第一页，获者在最后一页
+      //  判断是否在第一页，或者在最后一页
       if (this.$refs.videoRef.length - 1 == index || index == 0) {
         for (let i = 0; i < this.$refs.videoRef.length; i++) {
           this.$refs.videoRef[i].videoPause()
         }
         this.$refs.videoRef[index].videoPlay()
         this.page = index
-        // this.preloads = index  
         return
       }
-
       let timer = null
-
       clearTimeout(timer)
       timer = setTimeout(() => {
         if (this.pageStartY > this.pageEndY) {

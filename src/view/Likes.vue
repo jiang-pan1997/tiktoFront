@@ -29,6 +29,7 @@ import Header from '@/components/Header.vue'
     data() {
         return {
             videoList: [],
+            total:0,
            
         }
     }, 

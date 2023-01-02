@@ -4,7 +4,7 @@
             <li v-for="(video, index) in videoList" :key="video.id" @click="goVideoPlay(index)" >
                 <div class="imgContainer"><img class="img" :style="{ height: windowWidth / 3 * 1.33 + 'px' }" :src="video.imgUrl"
                         alt="">
-                    <div class="iconfont  icon-aixin1 likes  ">&nbsp;{{(video.likes<10000? video.likes:video.likes/10000+'w')}}</div>
+                    <div class="iconfont  icon-aixin1 likes  ">&nbsp;{{(video.likes<=10000 ? video.likes:video.likes/10000+'w')}}</div>
                 </div>
                 <p class="name">{{ video.name }}</p>
 
@@ -16,7 +16,7 @@
 <script>
 export default {
     name: '',
-    props: ['videoList'],
+    props: ['videoList','page'],
     data() {
         return {
             windowsHeiht: window.innerHeight,
@@ -25,7 +25,7 @@ export default {
     },
     methods:{
         goVideoPlay(index){
-        this.$router.push({name:'play',params:{index}})
+        this.$router.push({name:'play',params:{index:index,page:this.page}})
         },
         goPageTop(){
             console.log('goPageTop');

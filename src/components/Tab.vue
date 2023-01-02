@@ -14,8 +14,8 @@
 		<div class="tab-box" @click="goCollected" :style="{ color: select == 2 ? '#1989fa' : color }">
 			收藏
 		</div>
-		<div class="tab-box" @click="goAuthor" :style="{ color: select == 3 ? '#1989fa' : color }">
-			作者
+		<div class="tab-box" @click="goHome" :style="{ color: select == 3 ? '#1989fa' : color }">
+			我的
 		</div>
 	</div>
 </template>
@@ -60,13 +60,11 @@ export default {
 			localStorage.removeItem('videoList')
 			this.$router.push('/collected')
 		},
-		goAuthor() {
-			localStorage.removeItem('videoList')
+		goHome() {
 			this.bgc = '#FFF'
 			this.color = '#000'
 			this.$router.push({
-				name: 'author', params: {
-					author: this.videoInfo.author
+				name: 'home', params: {
 				}
 			})
 		},
