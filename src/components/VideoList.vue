@@ -1,6 +1,6 @@
 <template>
   <div class="index" @touchstart="touchStart" @touchend="touchEnd">
-    <van-swipe ref="Swipe" style="height: 100%;" :show-indicators="false" :duration="duration" :initial-swipe="preloads"
+    <van-swipe ref="Swipe" style="height: 100%;" :show-indicators="false" :duration="duration" :initial-swipe="initialSwipe"
       vertical @change="onChange">
       <van-swipe-item v-for="(item, index) in videoList" :key="item.id">
         <div class="video">
@@ -35,8 +35,11 @@ export default {
 
   },
   mounted() {
-    // this.$refs.videoRef[this.pageIndex || 0].videoPlay() 
-    // this.preloads=this.pageIndex
+    try {
+      this.$refs.videoRef[this.pageIndex].videoPlay() 
+    } catch (error) {
+
+    }
   },
   props: ['videoList', 'pageIndex', 'indexActive',],
   data() {
@@ -44,7 +47,7 @@ export default {
       page: 0,
       pageStartY: 0,
       pageEndY: 0,
-      preloads: this.pageIndex,
+      initialSwipe: this.pageIndex,
       duration: 500,
       currentPage: 0,
       windowsHeight: window.innerHeight,
@@ -86,7 +89,6 @@ export default {
           this.pageStartY = 0
           this.pageEndY = 0
           this.currentPage = index
-          console.log('向下滑动');
         }
       }, 20)
       //  翻页请求数据

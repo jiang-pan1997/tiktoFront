@@ -17,18 +17,16 @@ export default {
         VideoList
     },
     created() {
-        console.log('Index组件创建成功！');
         let result = JSON.parse(localStorage.getItem('indexList'))
         let pageIndexNum = localStorage.getItem('indexPage')
         if (result == null || pageIndexNum == null) {
             this.getData()
-            this.pageIndex = 0
+            // this.pageIndex = 0
         }
         else {
             this.videoList = result
             this.pageIndex = pageIndexNum
         }
-        // this.getData()
         this.$bus.$on('getNewVideo', () => {
             console.log('getNewVideo...............................');
             this.getData()

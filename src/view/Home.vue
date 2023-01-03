@@ -1,13 +1,12 @@
 <template>
   <div>
     <Header
-       :author="'我的'"
+      :author="'我的'"
       @getAuthorLike="getAllLike"
       @getData="getAllWorker"
       @getAuthorCollected="getAllCollected"
     ></Header>
     <List :videoList="videoList" ref="ListRef"></List>
-    
   </div>
 </template>
 
@@ -20,31 +19,34 @@ export default {
     List,
     Header,
   },
-  created(){
- this.$bus.$emit('tabShow',{tabShow:true,select:3})
+  created() {
+    this.$bus.$emit("tabShow", { tabShow: true, select: 3 });
+  },
+  activated() {
+    this.$bus.$emit("tabShow", { tabShow: true, select: 3 });
+     localStorage.setItem("videoList", JSON.stringify(this.videoList));
   },
   data() {
     return {
       videoList: [],
-      page:1,
-      total:0
+      page: 1,
+      total: 0,
     };
-  },
-  activated(){
-    localStorage.setItem("videoList", JSON.stringify( this.videoList));
   },
   methods: {
     async getAllLike() {
       let { data: res } = await this.$http.get("/movie/getVideoLike/1");
-      this.videoList =res.data;
-      localStorage.setItem("videoList", JSON.stringify( this.videoList));
+      this.videoList = res.data;
+      this.$refs.ListRef.goPageTop()
+      localStorage.setItem("videoList", JSON.stringify(this.videoList));
     },
     getAllWorker() {
-        this.videoList=[]
+      this.videoList = [];
     },
     async getAllCollected() {
       let { data: res } = await this.$http.get("/movie/getVideoCollected/1");
       this.videoList = res.data;
+       this.$refs.ListRef.goPageTop()
       localStorage.setItem("videoList", JSON.stringify(res.data));
     },
   },

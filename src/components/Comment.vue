@@ -121,7 +121,7 @@ export default {
         if (this.comments.length >= this.total) {
           this.finished = true;
         }
-      }, 1000);
+      }, 2000);
     },
   },
 };

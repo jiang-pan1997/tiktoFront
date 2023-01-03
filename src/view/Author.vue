@@ -41,6 +41,7 @@ watch:{
   }
 },
   activated(){
+     localStorage.setItem("videoList", JSON.stringify(this.videoList));
     this.$bus.$emit("tabShow", { tabShow: false });
   },
   data() {

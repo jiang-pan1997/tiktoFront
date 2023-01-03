@@ -22,7 +22,6 @@
 			}
 		},
 		created() {
-			console.log("first-nav 组件创建成功");
 		},
 		methods: {
 			

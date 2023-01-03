@@ -2,10 +2,10 @@
     <div class="headerContainer">
 
         <div class="header">
-            <div class="return-header" @click="goHistory" >&nbsp;<span class="iconfont icon-xiangzuojiantou return-header "></span></div>
+            <div class="return-header" @click="goIndex" >&nbsp;<span class="iconfont icon-xiangzuojiantou return-header "></span></div>
             <div class="author">
                 <div class="user-nav">
-                    <div class="imgContainer"><img :src="authorInfo.headPortrait!=null?authorInfo.headPortrait:require('../../public/images/1.jpg')"></div>
+                    <div class="imgContainer"><img :src="authorInfo?authorInfo.headPortrait:require('../../public/images/1.jpg')"></div>
                 </div>
                 <div class="user-nav" @click="goAuthorList"  >
                     <span class="title">{{author!="我的"?'作品':'关注'}}</span>
@@ -43,7 +43,7 @@ export default {
         }      
     },
     activated(){
-        this.$refs.WorksRef.style.borderBottom = "2px solid #000";
+        // this.$refs.WorksRef.style.borderBottom = "2px solid #000";
         if(this.author!='我的'){
           this.getAuthorInfo()
         }else{
@@ -53,7 +53,7 @@ export default {
     props: ['author'],
     data() {
         return {
-            authorInfo:{},
+            authorInfo:null,
             total:0,
             likes:0,
             collected:0,
@@ -111,8 +111,8 @@ export default {
             }
             this.$router.push('/authorList')
         },
-        goHistory(){
-            this.$router.go(-1)
+        goIndex(){
+            this.$router.push('/index')
         }
     }
 }
