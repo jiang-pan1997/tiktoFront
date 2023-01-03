@@ -40,9 +40,15 @@ export default {
           this.getAuthorInfo()
         }else{
         this.getUserInfo()
-        }
-       
-        
+        }      
+    },
+    activated(){
+        this.$refs.WorksRef.style.borderBottom = "2px solid #000";
+        if(this.author!='我的'){
+          this.getAuthorInfo()
+        }else{
+        this.getUserInfo()
+        } 
     },
     props: ['author'],
     data() {

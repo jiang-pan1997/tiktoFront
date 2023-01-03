@@ -28,15 +28,26 @@ export default {
       if (this.$route.params.author == undefined) {
         return localStorage.getItem("author");
       } else {
+        this.authorInfo=this.$route.params.author
         localStorage.setItem("author", this.$route.params.author);
         return this.$route.params.author;
-      }
-    },
+    }
+  }
+},
+watch:{
+  authorInfo(newVal){
+    this.videoList=[]
+    this.getData()
+  }
+},
+  activated(){
+    this.$bus.$emit("tabShow", { tabShow: false });
   },
   data() {
     return {
       videoList: [],
       total:0,
+      authorInfo:''
     };
   },
   methods: {

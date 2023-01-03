@@ -84,9 +84,7 @@ export default {
 	    var week = day * 7;
 	    var month = day * 30;
 	    var time1 = new Date().getTime();//当前的时间戳
-	    console.log(time1);
 	    var time2 = pubDate;//指定时间的时间戳
-	    console.log(time2);
 	    var time = time1 - time2;
  
 	    var result = null;

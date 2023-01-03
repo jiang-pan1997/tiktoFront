@@ -30,6 +30,9 @@ export default {
       total:0
     };
   },
+  activated(){
+    localStorage.setItem("videoList", JSON.stringify( this.videoList));
+  },
   methods: {
     async getAllLike() {
       let { data: res } = await this.$http.get("/movie/getVideoLike/1");

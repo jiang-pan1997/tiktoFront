@@ -4,8 +4,8 @@
       vertical @change="onChange">
       <van-swipe-item v-for="(item, index) in videoList" :key="item.id">
         <div class="video">
-          <video-play @doubleClick="doubleClick" :preloads="preloads" :windowsHeight="windowsHeight" :page="index"
-            :pageIndex="preloads" class="video" :videoList="item" ref="videoRef"></video-play>
+          <video-play @doubleClick="doubleClick" :windowsHeight="windowsHeight" :currentPage="currentPage"
+            :pageIndex="index" class="video" :videoList="item" ref="videoRef"></video-play>
         </div>
         <div class="left-box">
           <list-left :detail="item"></list-left>
@@ -46,6 +46,7 @@ export default {
       pageEndY: 0,
       preloads: this.pageIndex,
       duration: 500,
+      currentPage: 0,
       windowsHeight: window.innerHeight,
 
     }
@@ -80,19 +81,11 @@ export default {
         if (this.pageStartY > this.pageEndY) {
           this.pageStartY = 0
           this.pageEndY = 0
-          this.$refs.videoRef[index].videoPlay()
-          this.$refs.videoRef[index - 1].videoPause()
-          this.page = index
-          // console.log('向上滑动');
-          this.preloads = index
+          this.currentPage = index
         } else {
           this.pageStartY = 0
           this.pageEndY = 0
-          this.$refs.videoRef[index].videoPlay()
-          this.$refs.videoRef[index + 1].videoPause()
-          // this.$refs.Swipe.swipeTo(this.page-1)
-          this.page = index
-          this.preloads = index
+          this.currentPage = index
           console.log('向下滑动');
         }
       }, 20)

@@ -1,7 +1,7 @@
 <template>
 	<div class="videoPlayer" @click="click">
-		<video class="video" ref="videoList" :style="{height:windowsHeight-60+'px'}" :preload="preloadStatus"   x5-video-player-type="h5"  
-		:poster="videoList.imgUrl" webkit-playsinline="true" :autoplay="autoplayStatus" loop
+		<video class="video" ref="videoList" :style="{height:windowsHeight-60+'px'}"   x5-video-player-type="h5"  
+		:poster="videoList.imgUrl" webkit-playsinline="true"   loop  preload="none"
     x-webkit-airplay="true"
     playsinline="true"
     x5-video-player-fullscreen="false" :src="videoList.videoUrl"></video>
@@ -43,7 +43,18 @@ export default {
 		},
 
 	},
-	props: ['videoList', 'preloads', 'page','windowsHeight'],
+	watch:{
+		currentPage(newVal){
+           if(newVal==this.pageIndex){
+			// console.log('第'+this.pageIndex+'页播放');
+			this.videoPlay()
+		   }else{
+			this.videoPause()
+			// console.log('第'+this.pageIndex+'页暂停');
+		   }
+		}
+	},
+	props: ['videoList',  'currentPage','pageIndex','windowsHeight'],
 	data() {
 		return {
 			playStatus: false,
@@ -98,6 +109,7 @@ export default {
 		// 暂停函数
 		videoPause() {
 			let video = this.$refs.videoList
+			video.currentTime = 0.0; 
 			video.pause()
 			this.playStatus = false
 		}

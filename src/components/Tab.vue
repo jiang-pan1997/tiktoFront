@@ -37,7 +37,7 @@ export default {
 		}
 	},
     updated(){
-		console.log(this.select);
+		
 	},
 	methods: {
 		goIndex() {
