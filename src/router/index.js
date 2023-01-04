@@ -7,9 +7,9 @@ import Likes from '../view/Likes.vue'
 import Collected from '@/view/Collected'
 import VideoAdd from '@/view/VideoAdd'
 import Login from '@/view/MyLogin'
-import AuthorAdd from '@/view/AuthorAdd'
 import AuthorList from '@/view/AuthorList'
 import Home from '@/view/Home.vue'
+import Register from '@/view/Register.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -61,12 +61,6 @@ const routes = [
     component:Login,
    },
    {
-    path:'/authorAdd',
-    name:'authorAdd',
-    component:AuthorAdd,
-
-   },
-   {
     path:'/authorList',
     name:'authorList',
     component:AuthorList,
@@ -76,6 +70,12 @@ const routes = [
     name:'home',
     component:Home,
    },
+   {
+    path:'/register',
+    name:'register',
+    component:Register,
+   },
+   
 ]
 
 

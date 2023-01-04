@@ -17,10 +17,10 @@ import axios from 'axios'
  
 
 //本机地址
-// axios.defaults.baseURL = 'http://localhost:9696'
+axios.defaults.baseURL = 'http://localhost:9696'
 
 // 服务器地址
-axios.defaults.baseURL = 'http://study-everyday.cn:9696'
+// axios.defaults.baseURL = 'http://study-everyday.cn:9696'
 
 // 挂载一个自定义属性$http
 

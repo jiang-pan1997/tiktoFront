@@ -103,6 +103,33 @@ export default {
       video.currentTime = 0;
       video.play();
       this.updatePlay();
+      this.videoPlayNum()
+      this.getUserVideoList()
+    },
+   async setHostory(){
+    let data = {
+        worksId: this.videoList.id,
+        userId:localStorage.getItem('userId')
+      };
+      let { data: res } = await this.$http.post(`/contact/setBrowseData`,data);
+    },
+   async videoPlayNum(){
+    let data = {
+        worksId: this.videoList.id,
+        userId:localStorage.getItem('userId'),
+        playNum:this.playNum
+      };
+      let { data: res } = await this.$http.post(`/contact/setBrowseData`,data);
+    },
+   async getUserVideoList(){
+    let data = {
+        userId:localStorage.getItem('userId'),
+      };
+      let { data: res } = await this.$http.get(`/contact/getUserVideoList`,{
+        params:{
+        userId:localStorage.getItem('userId'),
+      }
+      });
     },
   },
 };

@@ -1,8 +1,8 @@
 <template>
-  <div class="login-app" :style="{ height: windowsHeight + 'px' }">
+  <div class="register-app" :style="{ height: windowsHeight + 'px' }">
     <div id="loginDiv" style="height: 350px">
       <form action="" id="form">
-        <h1 id="loginMsg">LOGIN IN</h1>
+        <h1 id="loginMsg">register</h1>
         <p>
           Username:<input id="username" name="username" type="text" v-model="username" />
         </p>
@@ -12,9 +12,8 @@
         </p>
         <p>Remember:<input id="remember" name="remember" type="checkbox" /></p>
         <div id="subDiv">
-          <input type="submit" class="button" value="登陆" @click.prevent="login" />&nbsp;&nbsp;&nbsp;
-          <input type="reset" class="button" value="重置" />&nbsp;&nbsp;&nbsp;
-          <a href="register.html">没有账号？</a>
+          <input type="submit" class="button" value="register" @click.prevent="register" />&nbsp;&nbsp;&nbsp;
+          <input type="reset" class="button" value="取消" />&nbsp;&nbsp;&nbsp;
         </div>
       </form>
     </div>
@@ -36,22 +35,20 @@ export default {
     };
   },
   methods: {
-    async login() {
+    async register() {
       let param = new URLSearchParams();
       param.append("username", this.username);
       param.append("password", this.password);
 
       const { data: res } = await this.$http({
         method: "post",
-        url: "/user/login",
+        url: "/user/register",
         data: param,
       });
       console.log(res);
       if (res.code === 1) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("userId", res.data.userId);
-        localStorage.setItem("username", res.data.username);
-        this.$router.push("/index");
+        localStorage.setItem("token", res.data);
+        // this.$router.push("/index");
       }
 
     },
@@ -83,7 +80,7 @@ body {
   height: 100%;
 }
 
-.login-app {
+.register-app {
   overflow: hidden;
   padding: 15%;
   background: url(../assets/index.jpg) no-repeat 0px 0px;
