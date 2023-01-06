@@ -1,21 +1,12 @@
 <template>
   <div class="list" ref="listRef">
     <ul>
-      <li
-        v-for="(video, index) in videoList"
-        :key="video.id"
-        @click="goVideoPlay(index)"
-      >
+      <li v-for="(video, index) in videoList" :key="video.id" @click="goVideoPlay(index)">
         <div class="imgContainer">
-          <img
-            class="img"
-            :style="{ height: (windowWidth / 3) * 1.33 + 'px' }"
-            :src="video.imgUrl"
-            alt=""
-          />
+          <img class="img" :style="{ height: (windowWidth / 3) * 1.33 + 'px' }" :src="video.imgUrl" alt="" />
           <div class="iconfont icon-aixin1 likes">
             &nbsp;{{
-              video.likes <= 10000 ? video.likes : video.likes / 10000 + "w"
+              videolikeNum(video.likes)
             }}
           </div>
           <div class="iconfont icon-24gl-play playNum">
@@ -34,14 +25,28 @@
 export default {
   name: "",
   props: ["videoList", "page"],
+  mounted() {
+    window.addEventListener('scroll', this.getTopHeight, true)
+  },
+  activated() {
+    document.documentElement.scrollTop = localStorage.getItem('topHieght')
+  },
+  deactivated() {
+    localStorage.setItem('topHieght', this.topHeight)
+  },
+  computed: {
+
+  },
   data() {
     return {
       windowsHeiht: window.innerHeight,
       windowWidth: window.innerWidth,
+      topHeight: 0,
     };
   },
   methods: {
     goVideoPlay(index) {
+      localStorage.setItem('videoList', JSON.stringify(this.videoList))
       this.$router.push({
         name: "play",
         params: { index: index, page: this.page },
@@ -50,8 +55,21 @@ export default {
     goPageTop() {
       document.documentElement.scrollTop = 0;
     },
-  },
-};
+    getTopHeight() {
+      //方法一
+      //let topHeight = Math.floor(document.body.scrollTop || document.documentElement.scrollTop || window.pageXOffset)
+      //console.log(topHeight)
+
+      //方法二
+      this.$nextTick(() => {
+        this.topHeight = document.body.scrollTop || document.documentElement.scrollTop || window.pageXOffset
+      })
+    },
+    videolikeNum(likes) {
+      return likes <= 10000 ? likes : likes / 10000 + "w"
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

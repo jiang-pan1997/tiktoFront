@@ -6,7 +6,8 @@
       @getData="getAllWorker"
       @getAuthorCollected="getAllCollected"
     ></Header>
-    <List :videoList="videoList" ref="ListRef"></List>
+    <!-- <List :videoList="videoList" ref="ListRef"></List> -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -23,8 +24,7 @@ export default {
     this.$bus.$emit("tabShow", { tabShow: true, select: 3 });
   },
   activated() {
-    this.$bus.$emit("tabShow", { tabShow: true, select: 3 });
-     localStorage.setItem("videoList", JSON.stringify(this.videoList));
+     this.$bus.$emit("tabShow", { tabShow: true, select: 3 });
   },
   data() {
     return {
@@ -35,19 +35,16 @@ export default {
   },
   methods: {
     async getAllLike() {
-      let { data: res } = await this.$http.get("/movie/getVideoLike/1");
-      this.videoList = res.data;
-      this.$refs.ListRef.goPageTop()
-      localStorage.setItem("videoList", JSON.stringify(this.videoList));
+      localStorage.removeItem('author')
+      this.$router.replace('/home/like')
     },
     getAllWorker() {
-      this.videoList = [];
+      localStorage.removeItem('author')
+      this.$router.replace('/home/works')
     },
     async getAllCollected() {
-      let { data: res } = await this.$http.get("/movie/getVideoCollected/1");
-      this.videoList = res.data;
-       this.$refs.ListRef.goPageTop()
-      localStorage.setItem("videoList", JSON.stringify(res.data));
+      localStorage.removeItem('author')
+      this.$router.replace('/home/collect')
     },
   },
 };

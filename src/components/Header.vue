@@ -2,26 +2,28 @@
     <div class="headerContainer">
 
         <div class="header">
-            <div class="return-header" @click="goIndex" >&nbsp;<span class="iconfont icon-xiangzuojiantou return-header "></span></div>
+            <div class="return-header" @click="goIndex">&nbsp;<span
+                    class="iconfont icon-xiangzuojiantou return-header "></span></div>
             <div class="author">
                 <div class="user-nav">
-                    <div class="imgContainer"><img :src="authorInfo?authorInfo.headPortrait:require('../../public/images/1.jpg')"></div>
+                    <div class="imgContainer"><img
+                            :src="authorInfo ? authorInfo.headPortrait : require('../../public/images/1.jpg')"></div>
                 </div>
-                <div class="user-nav" @click="goAuthorList"  >
-                    <span class="title">{{author!="我的"?'作品':'关注'}}</span>
-                    <span class="num">{{total}}</span>
+                <div class="user-nav" @click="goAuthorList">
+                    <span class="title">{{ author? '作品' : '关注'}}</span>
+                    <span class="num">{{ total }}</span>
                 </div>
-                <div class="user-nav" >
+                <div class="user-nav">
                     <span class="title">喜欢</span>
-                    <span class="num">{{likes}}</span>
+                    <span class="num">{{ likes }}</span>
                 </div>
                 <div class="user-nav">
                     <span class="title">收藏</span>
-                    <span class="num">{{collected}}</span>
+                    <span class="num">{{ collected }}</span>
                 </div>
             </div>
-            <div class="name" >{{author}}</div>
-            <div class="option"  >
+            <div class="name">{{author?author:'我的'}}</div>
+            <div class="option">
                 <div class="bar" ref="WorksRef" @click="getWorks">作品</div>
                 <div class="bar" ref="likesRef" @click="getLikes">喜欢</div>
                 <div class="bar" ref="collectedRef" @click="getcollected">收藏</div>
@@ -36,27 +38,29 @@
 export default {
     mounted() {
         this.$refs.WorksRef.style.borderBottom = "2px solid #000";
-        if(this.author!='我的'){
-          this.getAuthorInfo()
-        }else{
-        this.getUserInfo()
-        }      
+        this.author = localStorage.getItem('author')
+        if (this.author!=null) {
+            this.getAuthorInfo()
+        } else {
+            this.getUserInfo()
+        }
     },
-    activated(){
-        // this.$refs.WorksRef.style.borderBottom = "2px solid #000";
-        if(this.author!='我的'){
-          this.getAuthorInfo()
-        }else{
-        this.getUserInfo()
-        } 
+    activated() {
+        this.routeJudge()
+        this.author = localStorage.getItem('author')
+        if (this.author!=null) {
+            this.getAuthorInfo()
+        } else {
+            this.getUserInfo()
+        }
     },
-    props: ['author'],
     data() {
         return {
-            authorInfo:null,
-            total:0,
-            likes:0,
-            collected:0,
+            authorInfo: null,
+            total: 0,
+            likes: 0,
+            collected: 0,
+            author: ''
         }
     },
     methods: {
@@ -82,38 +86,64 @@ export default {
             this.$refs.collectedRef.style.borderBottom = "2px solid #000";
             this.$emit('getAuthorCollected')
         },
-      async  getAuthorInfo(){
-         let {data:res}= await this.$http.get(`/movie/getSignalAuthor/${this.author}`)
-         if(res.code==1){
-            if(res.data==null){
-                return
+        async getAuthorInfo() {
+            this.author = localStorage.getItem('author')
+            let { data: res } = await this.$http.get(`/contact/getSignalAuthor/${this.author}`, {
+                params: {
+                    userId: localStorage.getItem('userId'),
+                    relish: 1,
+                    collect: 1,
+                }
+            })
+            if (res.code == 1) {
+                if (res.data == null) {
+                    return
+                }
+                this.authorInfo = res.data.authorInfo
+                this.total = res.data.total
+                this.likes = res.data.likes
+                this.collected = res.data.collected
             }
-            this.authorInfo=res.data.authorInfo
-            this.total=res.data.total
-            this.likes=res.data.likes
-            this.collected=res.data.collected
-         }
         },
-              async  getUserInfo(){
-         let {data:res}= await this.$http.get(`/movie//geUserInfo`)
-         if(res.code==1){
-            if(res.data==null){
-                return
+        async getUserInfo() {
+            let { data: res } = await this.$http.get(`/contact//getUserInfo`, {
+                params: {
+                    userId: localStorage.getItem('userId')
+                }
+            })
+            if (res.code == 1) {
+                if (res.data == null) {
+                    return
+                }
+                this.total = res.data.authorTotal
+                this.likes = res.data.likes
+                this.collected = res.data.collected
             }
-               this.total=res.data.authorTotal
-            this.likes=res.data.likes
-            this.collected=res.data.collected
-         }
         },
-        goAuthorList(){
-            if(this.author!='我的'){
+        goAuthorList() {
+            if (this.author) {
                 return
             }
             this.$router.push('/authorList')
         },
-        goIndex(){
+        goIndex() {
             this.$router.push('/index')
-        }
+        },
+        routeJudge() {
+            if (this.$route.path == '/author/like' || this.$route.path == '/home/like') {
+                this.$refs.WorksRef.style.borderBottom = "none";
+                this.$refs.likesRef.style.borderBottom = "2px solid #000";
+                this.$refs.collectedRef.style.borderBottom = " none";
+            } else if (this.$route.path == '/author/collect' || this.$route.path == '/home/collect') {
+                this.$refs.WorksRef.style.borderBottom = "none";
+                this.$refs.likesRef.style.borderBottom = "none";
+                this.$refs.collectedRef.style.borderBottom = "2px solid #000";
+            } else {
+                this.$refs.WorksRef.style.borderBottom = "2px solid #000";
+                this.$refs.likesRef.style.borderBottom = "none";
+                this.$refs.collectedRef.style.borderBottom = "none";
+            }
+        },
     }
 }
 </script>

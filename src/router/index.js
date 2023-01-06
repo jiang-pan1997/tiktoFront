@@ -10,6 +10,9 @@ import Login from '@/view/MyLogin'
 import AuthorList from '@/view/AuthorList'
 import Home from '@/view/Home.vue'
 import Register from '@/view/Register.vue'
+import Works from '@/view/author/works'
+import Like from '@/view/author/like'
+import Collect from '@/view/author/collect'
 Vue.use(VueRouter)
 
 const routes = [
@@ -29,7 +32,17 @@ const routes = [
     path:'/author',
     name:'author',
     component:Author,
-
+    redirect: '/author/works',
+    children:[
+      {
+        path:'works',component:Works
+      },
+      {
+        path:'like',component:Like
+      },
+      {
+        path:'collect',component:Collect
+      },]
    },
    {
     path:'/play',
@@ -68,7 +81,18 @@ const routes = [
    {
     path:'/home',
     name:'home',
+    redirect: '/home/works',
     component:Home,
+    children:[
+      {
+        path:'works',component:Works
+      },
+      {
+        path:'like',component:Like
+      },
+      {
+        path:'collect',component:Collect
+      },]
    },
    {
     path:'/register',

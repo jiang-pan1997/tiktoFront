@@ -63,6 +63,7 @@ export default {
 		goHome() {
 			this.bgc = '#FFF'
 			this.color = '#000'
+			localStorage.removeItem('author')
 			this.$router.push({
 				name: 'home', params: {
 				}

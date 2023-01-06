@@ -14,6 +14,7 @@
       x5-video-player-fullscreen="false"
       :src="videoList.videoUrl"
       v-on:ended="ended"
+      v-on:play="play"
     ></video>
   </div>
 </template>
@@ -41,6 +42,7 @@ export default {
       playStatus: false,
       dblclick: false,
       playNum: 0,
+      firstPlay:true,
     };
   },
   methods: {
@@ -102,14 +104,21 @@ export default {
       let video = this.$refs.videoList;
       video.currentTime = 0;
       video.play();
-      this.updatePlay();
+      // this.updatePlay();
       this.videoPlayNum()
       this.getUserVideoList()
     },
-   async setHostory(){
+    play(){
+      if(this.firstPlay){
+        this.setVideoWatchHostory()
+        this.firstPlay=false
+      }
+    },
+   async setVideoWatchHostory(){
     let data = {
         worksId: this.videoList.id,
-        userId:localStorage.getItem('userId')
+        userId:localStorage.getItem('userId'),
+        worksAuthor:this.videoList.author
       };
       let { data: res } = await this.$http.post(`/contact/setBrowseData`,data);
     },
@@ -125,7 +134,7 @@ export default {
     let data = {
         userId:localStorage.getItem('userId'),
       };
-      let { data: res } = await this.$http.get(`/contact/getUserVideoList`,{
+      let { data: res } = await this.$http.get(`/contact/getUserVideoHistory`,{
         params:{
         userId:localStorage.getItem('userId'),
       }

@@ -1,12 +1,11 @@
 <template>
   <div class="author">
     <Header
-      :author="author"
       @getAuthorLike="getAuthorLike"
-      @getData="getData"
+      @getData="goWorks"
       @getAuthorCollected="getAuthorCollected"
     ></Header>
-    <List :videoList="videoList" ref="ListRef"></List>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -20,63 +19,34 @@ export default {
     Header,
   },
   created() {
-    this.getData();
     this.$bus.$emit("tabShow", { tabShow: false });
   },
   computed: {
-    author() {
-      if (this.$route.params.author == undefined) {
-        return localStorage.getItem("author");
-      } else {
-        this.authorInfo=this.$route.params.author
-        localStorage.setItem("author", this.$route.params.author);
-        return this.$route.params.author;
-    }
-  }
+
 },
-watch:{
-  authorInfo(newVal){
-    this.videoList=[]
-    this.getData()
-  }
+mounted(){
+
 },
   activated(){
-     localStorage.setItem("videoList", JSON.stringify(this.videoList));
     this.$bus.$emit("tabShow", { tabShow: false });
   },
   data() {
     return {
-      videoList: [],
-      total:0,
-      authorInfo:''
     };
   },
   methods: {
-    // 获取视频数据
-    async getData() {
-      let { data: res } = await this.$http.get(
-        `/movie/getAuthor/${this.author}`
-      );
-      this.videoList = res.data.data;
-      this.total=res.data.total
-      localStorage.setItem("videoList", JSON.stringify(res.data.data));
-      this.$refs.ListRef.goPageTop();
+    // 进入视频作者页
+    async goWorks() {
+      this.author=localStorage.getItem('author')
+      this.$router.replace('/author/works')
     },
     async getAuthorLike() {
-      const { data: res } = await this.$http.get(
-        `/movie/getAuthorLike/${this.author}`
-      );
-      this.videoList = res.data;
-      localStorage.setItem("videoList", JSON.stringify(res.data));
-      this.$refs.ListRef.goPageTop();
+      this.author=localStorage.getItem('author')
+      this.$router.replace('/author/like')
     },
     async getAuthorCollected() {
-      const { data: res } = await this.$http.get(
-        `/movie/getAuthorCollected/${this.author}`
-      );
-      this.videoList = res.data;
-      localStorage.setItem("videoList", JSON.stringify(res.data));
-      this.$refs.ListRef.goPageTop();
+      this.author=localStorage.getItem('author')
+      this.$router.replace('/author/collect')
     },
   },
 };

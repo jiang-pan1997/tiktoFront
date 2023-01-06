@@ -86,21 +86,38 @@ export default {
     },
     // 修改视频喜欢状态
     async setVideoLike(like) {
+      // const { data: res } = await this.$http.post(
+      //   `/movie/setVideoLike/${this.videoData.id}/${like}`
+      // );
+
+     let data={
+        userId:localStorage.getItem('userId'),
+        worksId:this.videoData.id,
+        relish:like
+      }
       const { data: res } = await this.$http.post(
-        `/movie/setVideoLike/${this.videoData.id}/${like}`
+        `/contact/setVideoLike`,data
       );
     },
 
     // 修改视频收藏状态
     async setVideoCollected(collected) {
+      // const { data: res } = await this.$http.post(
+      //   `/movie/setVideoCollected/${this.videoData.id}/${collected}`
+      // );
+
+      let data={
+        userId:localStorage.getItem('userId'),
+        worksId:this.videoData.id,
+        collect:collected
+      }
       const { data: res } = await this.$http.post(
-        `/movie/setVideoCollected/${this.videoData.id}/${collected}`
+        `/contact/setVideoCollected`,data
       );
     },
 
     goAuthor() {
-      // const {data:res}=this.$http.get(`/movie/author/${this.videoData.author}`)
-      localStorage.removeItem("videoList");
+      localStorage.setItem('author',this.videoData.author)
       this.$router.push({
         name: "author",
         params: {

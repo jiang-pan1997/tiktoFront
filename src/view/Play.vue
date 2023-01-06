@@ -16,6 +16,9 @@ export default {
     this.videoList = result;
     this.$bus.$emit("tabShow", { tabShow: false });
   },
+  mounted(){
+
+  },
   data() {
     return {
       videoList: [],

@@ -65,10 +65,8 @@ export default {
       this.pageEndY = res.changedTouches[0].pageY
       // console.log('鼠标结束:'+this.pageEndY);
     },
-
     // swiper切换触发事件
     onChange(index) {
-
       //  判断是否在第一页，或者在最后一页
       if (this.$refs.videoRef.length - 1 == index || index == 0) {
         for (let i = 0; i < this.$refs.videoRef.length; i++) {
@@ -95,7 +93,7 @@ export default {
       if (index > this.$refs.videoRef.length - 3 && this.indexActive) {
         // console.log('index位置：' + index);
         setTimeout(() => {
-          this.preloads = index
+          this.initialSwipe = index
           this.$bus.$emit('getNewVideo')
         }, 1000);
       }

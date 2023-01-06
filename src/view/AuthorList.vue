@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>作者列表</h1>
-       <p v-for="(author,index) in authorList" :key="author.id" @click="goAuthor(author.author)" >{{author.author}}</p>
+       <p v-for="(author) in authorList" :key="author.id" @click="goAuthor(author.author)" >{{author.author}}</p>
     </div>
 </template>
 
@@ -23,6 +23,7 @@
             this.authorList=res.data
             },
             goAuthor(author){
+                localStorage.setItem('author',author)
                 this.$router.push({
 				name: 'author', params: {
 					author: author

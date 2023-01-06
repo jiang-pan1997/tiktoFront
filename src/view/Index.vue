@@ -21,15 +21,14 @@ export default {
         let pageIndexNum = localStorage.getItem('indexPage')
         if (result == null || pageIndexNum == null) {
             this.getData()
-            // this.pageIndex = 0
         }
         else {
             this.videoList = result
             this.pageIndex = pageIndexNum
         }
         this.$bus.$on('getNewVideo', () => {
-            console.log('getNewVideo...............................');
             this.getData()
+            this.pageIndex=localStorage.getItem('indexPage')
         })
         this.$bus.$emit('tabShow',{tabShow:true,select:0})
 
@@ -47,7 +46,6 @@ export default {
             let result = [...this.videoList, ...res.data]
             this.videoList = this.uniqueFunc(result)
             localStorage.setItem('indexList', JSON.stringify(this.videoList))
-
         },
         uniqueFunc(arr) {
             var temp=[]
