@@ -14,7 +14,7 @@
         <div id="subDiv">
           <input type="submit" class="button" value="登陆" @click.prevent="login" />&nbsp;&nbsp;&nbsp;
           <input type="reset" class="button" value="重置" />&nbsp;&nbsp;&nbsp;
-          <a href="register.html">没有账号？</a>
+          <a href="" @click.prevent="goRegister" >没有账号？</a>
         </div>
       </form>
     </div>
@@ -51,10 +51,13 @@ export default {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("userId", res.data.userId);
         localStorage.setItem("username", res.data.username);
-        this.$router.push("/index");
+        this.$router.replace("/index");
       }
 
     },
+    goRegister(){
+      this.$router.replace('/register')
+    }
   },
 };
 </script>

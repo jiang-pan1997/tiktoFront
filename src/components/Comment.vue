@@ -2,11 +2,11 @@
   <div>
     <!-- 展示总共多少条评论 -->
     <div class="header">{{ total }}条评论</div>
-
     <van-list
       v-model="loading"
       :finished="finished"
       finished-text="没有更多了"
+      :immediate-check="false"
       @load="onLoad"
     >
       <!-- 单个评论内容 -->

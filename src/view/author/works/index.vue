@@ -31,6 +31,9 @@ export default {
       this.getData()
     }
   },
+  deactivated(){
+    localStorage.setItem('page',this.page)
+  },
   data() {
     return {
       videoList: [],

@@ -1,11 +1,11 @@
 <template>
   <div>
-    <Header
+    <AuthorHeader
       :author="'我的'"
       @getAuthorLike="getAllLike"
       @getData="getAllWorker"
       @getAuthorCollected="getAllCollected"
-    ></Header>
+    ></AuthorHeader>
     <!-- <List :videoList="videoList" ref="ListRef"></List> -->
     <router-view></router-view>
   </div>
@@ -13,18 +13,19 @@
 
 <script>
 import List from "@/components/List.vue";
-import Header from "@/components/Header.vue";
+import AuthorHeader from "@/components/AuthorHeader.vue";
 export default {
   name: "Home",
   components: {
     List,
-    Header,
+    AuthorHeader,
   },
   created() {
     this.$bus.$emit("tabShow", { tabShow: true, select: 3 });
   },
   activated() {
      this.$bus.$emit("tabShow", { tabShow: true, select: 3 });
+     localStorage.removeItem("author")
   },
   data() {
     return {

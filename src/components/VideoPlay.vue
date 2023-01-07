@@ -33,6 +33,7 @@ export default {
         this.videoPlay();
       } else {
         this.videoPause();
+        this.firstPlay=true
       }
     },
   },
@@ -92,53 +93,34 @@ export default {
       video.pause();
       this.playStatus = false;
     },
-    async updatePlay() {
+    // 所以总共播放量统计
+    async updateAllVideoPlay() {
       let data = {
-        id: this.videoList.id,
-        playNum: this.playNum,
+        id: this.videoList.id
       };
        let { data: res } = await this.$http.put(`/movie/updatePlayNum`,data);
     },
     ended() {
-      this.playNum = this.playNum + 1;
       let video = this.$refs.videoList;
       video.currentTime = 0;
       video.play();
-      // this.updatePlay();
-      this.videoPlayNum()
-      this.getUserVideoList()
+      this.updateUserVideoData()
+      this.updateAllVideoPlay();
     },
     play(){
       if(this.firstPlay){
-        this.setVideoWatchHostory()
+        this.updateUserVideoData()
+        this.updateAllVideoPlay();
         this.firstPlay=false
       }
     },
-   async setVideoWatchHostory(){
+   async updateUserVideoData(){
     let data = {
         worksId: this.videoList.id,
         userId:localStorage.getItem('userId'),
         worksAuthor:this.videoList.author
-      };
-      let { data: res } = await this.$http.post(`/contact/setBrowseData`,data);
-    },
-   async videoPlayNum(){
-    let data = {
-        worksId: this.videoList.id,
-        userId:localStorage.getItem('userId'),
-        playNum:this.playNum
-      };
-      let { data: res } = await this.$http.post(`/contact/setBrowseData`,data);
-    },
-   async getUserVideoList(){
-    let data = {
-        userId:localStorage.getItem('userId'),
-      };
-      let { data: res } = await this.$http.get(`/contact/getUserVideoHistory`,{
-        params:{
-        userId:localStorage.getItem('userId'),
       }
-      });
+      let { data: res } = await this.$http.post(`/contact/updateUserVideoData`,data);
     },
   },
 };

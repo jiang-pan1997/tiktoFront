@@ -1,42 +1,31 @@
 <template>
   <div>
+    <h4>历史记录</h4>
     <van-list
       v-model="loading"
       :finished="finished"
-      finished-text="没有更多了"
-      :immediate-check="false"
+      finished-text="没有更多了" 
+      :immediate-check="false" 
       @load="onLoad"
     >
       <List :videoList="videoList" ref="ListRef"></List>
     </van-list>
   </div>
 </template>
-
+ 
 <script>
 import List from "@/components/List.vue";
 export default {
-  name: "collect",
+  name: "UserHostory",
   components: {
     List,
   },
   created() {
     this.videoList = [];
     this.page = 1;
-    this.getAuthorCollected();
+    this.getUserVideoHostory();
   },
   computed: {},
-  activated() {
-    if (this.author != localStorage.getItem("author")) {
-      this.videoList = [];
-      this.page = 1;
-      this.loading = false;
-      this.finished = false;
-      this.getAuthorCollected();
-    }
-  },
-  deactivated() {
-    localStorage.setItem("page", this.page);
-  },
   data() {
     return {
       videoList: [],
@@ -50,17 +39,18 @@ export default {
     };
   },
   methods: {
-    async getAuthorCollected() {
+    async getUserVideoHostory() {
       this.author = localStorage.getItem("author");
-      const { data: res } = await this.$http.get(`/contact/getUserCollected`, {
-        params: {
-          userId: localStorage.getItem("userId"),
-          worksAuthor: localStorage.getItem("author"),
-          collect: 1,
-          page: this.page,
-          pageSize: 10,
-        },
-      });
+      const { data: res } = await this.$http.get(
+        `/contact/getUserVideoHistory`,
+        {
+          params: {
+            userId: localStorage.getItem("userId"),
+            page: this.page,
+            pageSize: 10,
+          },
+        }
+      );
       this.videoList = [...this.videoList, ...res.data.records];
       this.total = res.data.total;
       this.pages = res.data.pages;
@@ -71,7 +61,7 @@ export default {
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       setTimeout(() => {
         this.page = this.page + 1;
-        this.getAuthorCollected();
+        this.getUserVideoHostory();
         // 加载状态结束
         this.loading = false;
         setTimeout(() => {
@@ -86,4 +76,8 @@ export default {
 </script>
 
 <style lang="less" scoped >
+h4{
+    font-weight: bold;
+    text-align: center;
+}
 </style>

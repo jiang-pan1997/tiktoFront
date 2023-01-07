@@ -13,6 +13,7 @@ import Register from '@/view/Register.vue'
 import Works from '@/view/author/works'
 import Like from '@/view/author/like'
 import Collect from '@/view/author/collect'
+import UserHostory from '@/view/UserHostory.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -98,7 +99,12 @@ const routes = [
     path:'/register',
     name:'register',
     component:Register,
-   },
+   }, 
+   {
+    path:'/userHostory',
+    name:'userHostory',
+    component:UserHostory,
+   }, 
    
 ]
 
@@ -112,7 +118,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to,from,next)=>{
-  if(to.path==='/login')
+  if(to.path==='/login' || to.path==='/register')
       return next()
     if(to.path!='/login')
     { 

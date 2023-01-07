@@ -1,8 +1,10 @@
 <template>
   <div class="headerContainer">
     <div class="header">
-      <div class="return-header" @click="goIndex">
-        &nbsp;<span class="iconfont icon-xiangzuojiantou return-header"></span>
+      <div class="return-header">
+        <div class="right-header menu" @click.prevent="goUserMenu">
+          <span class="iconfont icon-mulu"></span>&nbsp;
+        </div>
       </div>
       <div class="author">
         <div class="user-nav">
@@ -17,7 +19,7 @@
           </div>
         </div>
         <div class="user-nav" @click="goAuthorList">
-          <span class="title">作品</span>
+          <span class="title">关注</span>
           <span class="num">{{ total }}</span>
         </div>
         <div class="user-nav">
@@ -29,18 +31,35 @@
           <span class="num">{{ collected }}</span>
         </div>
       </div>
-      <div class="name">{{ author}}</div>
+      <div class="name">{{ username }}</div>
       <div class="option">
         <div class="bar" ref="WorksRef" @click="getWorks">作品</div>
         <div class="bar" ref="likesRef" @click="getLikes">喜欢</div>
         <div class="bar" ref="collectedRef" @click="getcollected">收藏</div>
       </div>
     </div>
+    <van-popup
+      v-model="show"
+      position="right"
+      :style="{ height: '100%', width: '50%' }"
+    >
+      <div>
+        <span class="iconfont icon-qiehuanyonghu1 menu_num" @click="goLogin">
+          &nbsp;切换用户
+        </span>
+      </div>
+      <div>
+        <span class="iconfont icon-history menu_num" @click="goUserHostory">
+          &nbsp;观看历史</span
+        >
+      </div>
+    </van-popup>
   </div>
 </template>
 
 <script>
 export default {
+  name: "AuthorHeader",
   mounted() {
     this.$refs.WorksRef.style.borderBottom = "2px solid #000";
     this.author = localStorage.getItem("author");
@@ -51,6 +70,8 @@ export default {
     }
   },
   activated() {
+    this.show = false;
+    this.username = localStorage.getItem("username");
     this.routeJudge();
     this.author = localStorage.getItem("author");
     if (this.author != null) {
@@ -59,6 +80,7 @@ export default {
       this.getUserInfo();
     }
   },
+  deactivated() {},
   data() {
     return {
       authorInfo: null,
@@ -66,9 +88,14 @@ export default {
       likes: 0,
       collected: 0,
       author: "",
+      username: "",
+      show: false,
     };
   },
   methods: {
+    showPopup() {
+      this.show = true;
+    },
     onClickLeft() {
       this.$router.push("/index");
     },
@@ -89,28 +116,6 @@ export default {
       this.$refs.likesRef.style.borderBottom = "none";
       this.$refs.collectedRef.style.borderBottom = "2px solid #000";
       this.$emit("getAuthorCollected");
-    },
-    async getAuthorInfo() {
-      this.author = localStorage.getItem("author");
-      let { data: res } = await this.$http.get(
-        `/contact/getSignalAuthor/${this.author}`,
-        {
-          params: {
-            userId: localStorage.getItem("userId"),
-            relish: 1,
-            collect: 1,
-          },
-        }
-      );
-      if (res.code == 1) {
-        if (res.data == null) {
-          return;
-        }
-        this.authorInfo = res.data.authorInfo;
-        this.total = res.data.total;
-        this.likes = res.data.likes;
-        this.collected = res.data.collected;
-      }
     },
     async getUserInfo() {
       let { data: res } = await this.$http.get(`/contact//getUserInfo`, {
@@ -133,8 +138,14 @@ export default {
       }
       this.$router.push("/authorList");
     },
-    goIndex() {
-      this.$router.push("/index");
+    goUserMenu() {
+      this.show = true;
+    },
+    goLogin() {
+      this.$router.replace("/login");
+    },
+    goUserHostory() {
+      this.$router.push("/userHostory");
     },
     routeJudge() {
       if (
@@ -179,12 +190,23 @@ export default {
 }
 
 .return-header {
+  position: relative;
   height: 40px;
   font-size: 24px;
   line-height: 40px;
   // font-weight: 700;
   background-color: #222629;
   color: #fff;
+
+  .right-header {
+    position: absolute;
+    margin: auto 0;
+    top: 10px;
+    right: 15px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+  }
 }
 
 .author {
@@ -252,5 +274,26 @@ export default {
     flex: 1;
     text-align: center;
   }
+}
+
+.menu {
+  position: relative;
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+  padding-left: 10px;
+  font-size: 16px;
+  span {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+.menu_num {
+  height: 40px;
+  width: 100%;
+  line-height: 40px;
+  padding-left: 10px;
+  font-size: 16px;
 }
 </style>

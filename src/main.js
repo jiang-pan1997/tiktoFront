@@ -14,7 +14,7 @@ import { List } from 'vant';
 
 // 引入 axios
 import axios from 'axios'
- 
+
 
 //本机地址
 // axios.defaults.baseURL = 'http://localhost:9696'
@@ -25,22 +25,22 @@ axios.defaults.baseURL = 'http://study-everyday.cn:9696'
 // 挂载一个自定义属性$http
 
 
-axios.interceptors.request.use((config)=>{
-   config.headers.token=localStorage.getItem('token')
-   return config
+axios.interceptors.request.use((config) => {
+  config.headers.token = localStorage.getItem('token')
+  return config
 })
 
 // 响应拦截器
-axios.interceptors.response.use((res)=>{
-  if(res.data.msg=='NOTLOGIN'){
+axios.interceptors.response.use((res) => {
+  if (res.data.msg == 'NOTLOGIN') {
     localStorage.removeItem('token')
     router.replace({
-      path:'/login'
+      path: '/login'
     })
-    return 
+    return
   }
   return res
-},(error)=>{
+}, (error) => {
   return Promise.reject(new Error('faile'))
 })
 
@@ -59,7 +59,7 @@ new Vue({
   router,
   render: h => h(App),
   beforeCreate() {
-  Vue.prototype.$bus=this
+    Vue.prototype.$bus = this
     // Vue.prototype.$API=API
   },
 }).$mount('#app')

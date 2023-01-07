@@ -13,7 +13,7 @@
         <p>Remember:<input id="remember" name="remember" type="checkbox" /></p>
         <div id="subDiv">
           <input type="submit" class="button" value="register" @click.prevent="register" />&nbsp;&nbsp;&nbsp;
-          <input type="reset" class="button" value="取消" />&nbsp;&nbsp;&nbsp;
+          <input type="reset" class="button" value="取消" @click.prevent="goHome" />&nbsp;&nbsp;&nbsp;
         </div>
       </form>
     </div>
@@ -48,9 +48,12 @@ export default {
       console.log(res);
       if (res.code === 1) {
         localStorage.setItem("token", res.data);
-        // this.$router.push("/index");
+        this.$router.replace("/login");
       }
 
+    },
+    goHome(){
+    this.$router.replace('/login')
     },
   },
 };

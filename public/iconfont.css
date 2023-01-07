@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3794773 */
-  src: url('//at.alicdn.com/t/c/font_3794773_75458gr1fdd.woff2?t=1672755112024') format('woff2'),
-       url('//at.alicdn.com/t/c/font_3794773_75458gr1fdd.woff?t=1672755112024') format('woff'),
-       url('//at.alicdn.com/t/c/font_3794773_75458gr1fdd.ttf?t=1672755112024') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_3794773_oxnv3z11ppm.woff2?t=1673063590892') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3794773_oxnv3z11ppm.woff?t=1673063590892') format('woff'),
+       url('//at.alicdn.com/t/c/font_3794773_oxnv3z11ppm.ttf?t=1673063590892') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-qiehuanyonghu1:before {
+  content: "\e6c6";
+}
+
+.icon-tuichu:before {
+  content: "\e892";
+}
+
+.icon-qiehuanyonghu:before {
+  content: "\e695";
+}
+
+.icon-history:before {
+  content: "\e66d";
+}
+
+.icon-mulu:before {
+  content: "\e62f";
 }
 
 .icon-24gl-play:before {
