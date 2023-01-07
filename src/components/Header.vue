@@ -1,19 +1,11 @@
 <template>
   <div class="headerContainer">
     <div class="header">
-      <div class="return-header" @click="goIndex">
-        &nbsp;<span class="iconfont icon-xiangzuojiantou return-header"></span>
-      </div>
+      <div class="return-header" @click="goIndex">&nbsp;<span class="iconfont icon-xiangzuojiantou return-header"></span></div>
       <div class="author">
         <div class="user-nav">
           <div class="imgContainer">
-            <img
-              :src="
-                authorInfo
-                  ? authorInfo.headPortrait
-                  : require('../../public/images/1.jpg')
-              "
-            />
+            <img :src="authorInfo ? authorInfo.headPortrait : require('../../public/images/1.jpg')" />
           </div>
         </div>
         <div class="user-nav" @click="goAuthorList">
@@ -29,7 +21,7 @@
           <span class="num">{{ collected }}</span>
         </div>
       </div>
-      <div class="name">{{ author}}</div>
+      <div class="name">{{ author }}</div>
       <div class="option">
         <div class="bar" ref="WorksRef" @click="getWorks">作品</div>
         <div class="bar" ref="likesRef" @click="getLikes">喜欢</div>
@@ -40,24 +32,17 @@
 </template>
 
 <script>
+import { getSignalAuthorInfo } from '@/api'
 export default {
   mounted() {
-    this.$refs.WorksRef.style.borderBottom = "2px solid #000";
-    this.author = localStorage.getItem("author");
-    if (this.author != null) {
-      this.getAuthorInfo();
-    } else {
-      this.getUserInfo();
-    }
+    this.$refs.WorksRef.style.borderBottom = '2px solid #000'
+    this.author = localStorage.getItem('author')
+    this.getAuthorInfo()
   },
   activated() {
-    this.routeJudge();
-    this.author = localStorage.getItem("author");
-    if (this.author != null) {
-      this.getAuthorInfo();
-    } else {
-      this.getUserInfo();
-    }
+    this.routeJudge()
+    this.author = localStorage.getItem('author')
+    this.getAuthorInfo()
   },
   data() {
     return {
@@ -65,100 +50,75 @@ export default {
       total: 0,
       likes: 0,
       collected: 0,
-      author: "",
-    };
+      author: ''
+    }
   },
   methods: {
     onClickLeft() {
-      this.$router.push("/index");
+      this.$router.push('/index')
     },
     getWorks() {
-      this.$refs.WorksRef.style.borderBottom = "2px solid #000";
-      this.$refs.likesRef.style.borderBottom = "none";
-      this.$refs.collectedRef.style.borderBottom = "none";
-      this.$emit("getData");
+      this.$refs.WorksRef.style.borderBottom = '2px solid #000'
+      this.$refs.likesRef.style.borderBottom = 'none'
+      this.$refs.collectedRef.style.borderBottom = 'none'
+      this.$emit('getData')
     },
     getLikes() {
-      this.$refs.WorksRef.style.borderBottom = "none";
-      this.$refs.likesRef.style.borderBottom = "2px solid #000";
-      this.$refs.collectedRef.style.borderBottom = " none";
-      this.$emit("getAuthorLike");
+      this.$refs.WorksRef.style.borderBottom = 'none'
+      this.$refs.likesRef.style.borderBottom = '2px solid #000'
+      this.$refs.collectedRef.style.borderBottom = ' none'
+      this.$emit('getAuthorLike')
     },
     getcollected() {
-      this.$refs.WorksRef.style.borderBottom = "none";
-      this.$refs.likesRef.style.borderBottom = "none";
-      this.$refs.collectedRef.style.borderBottom = "2px solid #000";
-      this.$emit("getAuthorCollected");
+      this.$refs.WorksRef.style.borderBottom = 'none'
+      this.$refs.likesRef.style.borderBottom = 'none'
+      this.$refs.collectedRef.style.borderBottom = '2px solid #000'
+      this.$emit('getAuthorCollected')
     },
     async getAuthorInfo() {
-      this.author = localStorage.getItem("author");
-      let { data: res } = await this.$http.get(
-        `/contact/getSignalAuthor/${this.author}`,
-        {
-          params: {
-            userId: localStorage.getItem("userId"),
-            relish: 1,
-            collect: 1,
-          },
-        }
-      );
-      if (res.code == 1) {
-        if (res.data == null) {
-          return;
-        }
-        this.authorInfo = res.data.authorInfo;
-        this.total = res.data.total;
-        this.likes = res.data.likes;
-        this.collected = res.data.collected;
+      this.author = localStorage.getItem('author')
+      let params = {
+        userId: localStorage.getItem('userId'),
+        relish: 1,
+        collect: 1
       }
-    },
-    async getUserInfo() {
-      let { data: res } = await this.$http.get(`/contact//getUserInfo`, {
-        params: {
-          userId: localStorage.getItem("userId"),
-        },
-      });
+      let { data: res } = await getSignalAuthorInfo(this.author, params)
       if (res.code == 1) {
         if (res.data == null) {
-          return;
+          return
         }
-        this.total = res.data.authorTotal;
-        this.likes = res.data.likes;
-        this.collected = res.data.collected;
+        this.authorInfo = res.data.authorInfo
+        this.total = res.data.total
+        this.likes = res.data.likes
+        this.collected = res.data.collected
       }
     },
     goAuthorList() {
       if (this.author) {
-        return;
+        return
       }
-      this.$router.push("/authorList");
+      this.$router.push('/authorList')
     },
     goIndex() {
-      this.$router.push("/index");
+      this.$router.push('/index')
     },
     routeJudge() {
-      if (
-        this.$route.path == "/author/like" ||
-        this.$route.path == "/home/like"
-      ) {
-        this.$refs.WorksRef.style.borderBottom = "none";
-        this.$refs.likesRef.style.borderBottom = "2px solid #000";
-        this.$refs.collectedRef.style.borderBottom = " none";
-      } else if (
-        this.$route.path == "/author/collect" ||
-        this.$route.path == "/home/collect"
-      ) {
-        this.$refs.WorksRef.style.borderBottom = "none";
-        this.$refs.likesRef.style.borderBottom = "none";
-        this.$refs.collectedRef.style.borderBottom = "2px solid #000";
+      if (this.$route.path == '/author/like' || this.$route.path == '/home/like') {
+        this.$refs.WorksRef.style.borderBottom = 'none'
+        this.$refs.likesRef.style.borderBottom = '2px solid #000'
+        this.$refs.collectedRef.style.borderBottom = ' none'
+      } else if (this.$route.path == '/author/collect' || this.$route.path == '/home/collect') {
+        this.$refs.WorksRef.style.borderBottom = 'none'
+        this.$refs.likesRef.style.borderBottom = 'none'
+        this.$refs.collectedRef.style.borderBottom = '2px solid #000'
       } else {
-        this.$refs.WorksRef.style.borderBottom = "2px solid #000";
-        this.$refs.likesRef.style.borderBottom = "none";
-        this.$refs.collectedRef.style.borderBottom = "none";
+        this.$refs.WorksRef.style.borderBottom = '2px solid #000'
+        this.$refs.likesRef.style.borderBottom = 'none'
+        this.$refs.collectedRef.style.borderBottom = 'none'
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

@@ -1,83 +1,77 @@
 <template>
   <div>
     <h4>历史记录</h4>
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      finished-text="没有更多了" 
-      :immediate-check="false" 
-      @load="onLoad"
-    >
+    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" :immediate-check="false" @load="onLoad">
       <List :videoList="videoList" ref="ListRef"></List>
     </van-list>
   </div>
 </template>
- 
+
 <script>
-import List from "@/components/List.vue";
+import { getUserVideoHistory } from '@/api'
+import List from '@/components/List.vue'
 export default {
-  name: "UserHostory",
+  name: 'UserHostory',
   components: {
-    List,
+    List
   },
   created() {
-    this.videoList = [];
-    this.page = 1;
-    this.getUserVideoHostory();
+    this.videoList = []
+    this.page = 1
+    this.getUserVideoHostory()
   },
   computed: {},
+  destroyed() {
+    localStorage.setItem('page', this.page)
+  },
   data() {
     return {
       videoList: [],
       total: 0,
-      author: "",
+      author: '',
       page: 1,
       total: 0,
       pages: 0,
       loading: false,
-      finished: false,
-    };
+      finished: false
+    }
   },
   methods: {
     async getUserVideoHostory() {
-      this.author = localStorage.getItem("author");
-      const { data: res } = await this.$http.get(
-        `/contact/getUserVideoHistory`,
-        {
-          params: {
-            userId: localStorage.getItem("userId"),
-            page: this.page,
-            pageSize: 10,
-          },
-        }
-      );
-      this.videoList = [...this.videoList, ...res.data.records];
-      this.total = res.data.total;
-      this.pages = res.data.pages;
-      localStorage.setItem("videoList", JSON.stringify(this.videoList));
+      this.author = localStorage.getItem('author')
+      let params = {
+        userId: localStorage.getItem('userId'),
+        page: this.page,
+        pageSize: 10
+      }
+      const { data: res } = await getUserVideoHistory(params)
+      this.videoList = [...this.videoList, ...res.data.records]
+      this.total = res.data.total
+      this.pages = res.data.pages
+      localStorage.setItem('videoList', JSON.stringify(this.videoList))
     },
     onLoad() {
       // 异步更新数据
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       setTimeout(() => {
-        this.page = this.page + 1;
-        this.getUserVideoHostory();
+        this.page = this.page + 1
+        this.getUserVideoHostory()
         // 加载状态结束
-        this.loading = false;
+        this.loading = false
         setTimeout(() => {
           if (this.page >= this.pages) {
-            this.finished = true;
+            this.finished = true
           }
-        }, 200);
-      }, 1000);
-    },
-  },
-};
+        }, 200)
+      }, 1000)
+    }
+  }
+}
 </script>
 
-<style lang="less" scoped >
-h4{
-    font-weight: bold;
-    text-align: center;
+<style lang="less" scoped>
+h4 {
+  font-weight: bold;
+  text-align: center;
 }
 </style>

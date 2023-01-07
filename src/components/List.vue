@@ -4,15 +4,9 @@
       <li v-for="(video, index) in videoList" :key="video.id" @click="goVideoPlay(index)">
         <div class="imgContainer">
           <img class="img" :style="{ height: (windowWidth / 3) * 1.33 + 'px' }" :src="video.imgUrl" alt="" />
-          <div class="iconfont icon-aixin1 likes">
-            &nbsp;{{
-              videolikeNum(video.likes)
-            }}
-          </div>
+          <div class="iconfont icon-aixin1 likes">&nbsp;{{ videolikeNum(video.likes) }}</div>
           <div class="iconfont icon-24gl-play playNum">
-            {{
-              video.playNum
-            }}
+            {{ video.playNum }}
           </div>
         </div>
         <p class="name">{{ video.name }}</p>
@@ -23,8 +17,8 @@
 
 <script>
 export default {
-  name: "",
-  props: ["videoList", "page"],
+  name: '',
+  props: ['videoList', 'page'],
   mounted() {
     window.addEventListener('scroll', this.getTopHeight, true)
   },
@@ -34,26 +28,24 @@ export default {
   deactivated() {
     localStorage.setItem('topHieght', this.topHeight)
   },
-  computed: {
-
-  },
+  computed: {},
   data() {
     return {
       windowsHeiht: window.innerHeight,
       windowWidth: window.innerWidth,
-      topHeight: 0,
-    };
+      topHeight: 0
+    }
   },
   methods: {
     goVideoPlay(index) {
       localStorage.setItem('videoList', JSON.stringify(this.videoList))
       this.$router.push({
-        name: "play",
-        params: { index: index, page: this.page },
-      });
+        name: 'play',
+        params: { index: index, page: this.page }
+      })
     },
     goPageTop() {
-      document.documentElement.scrollTop = 0;
+      document.documentElement.scrollTop = 0
     },
     getTopHeight() {
       //方法一
@@ -66,7 +58,7 @@ export default {
       })
     },
     videolikeNum(likes) {
-      return likes <= 10000 ? likes : likes / 10000 + "w"
+      return likes <= 10000 ? likes : likes / 10000 + 'w'
     }
   }
 }

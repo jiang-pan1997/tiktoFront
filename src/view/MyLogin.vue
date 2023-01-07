@@ -3,18 +3,13 @@
     <div id="loginDiv" style="height: 350px">
       <form action="" id="form">
         <h1 id="loginMsg">LOGIN IN</h1>
-        <p>
-          Username:<input id="username" name="username" type="text" v-model="username" />
-        </p>
+        <p>Username:<input id="username" name="username" type="text" v-model="username" /></p>
 
-        <p>
-          Password:<input id="password" name="password" type="password" v-model="password" />
-        </p>
+        <p>Password:<input id="password" name="password" type="password" v-model="password" /></p>
         <p>Remember:<input id="remember" name="remember" type="checkbox" /></p>
         <div id="subDiv">
-          <input type="submit" class="button" value="登陆" @click.prevent="login" />&nbsp;&nbsp;&nbsp;
-          <input type="reset" class="button" value="重置" />&nbsp;&nbsp;&nbsp;
-          <a href="" @click.prevent="goRegister" >没有账号？</a>
+          <input type="submit" class="button" value="登陆" @click.prevent="login" />&nbsp;&nbsp;&nbsp; <input type="reset" class="button" value="重置" />&nbsp;&nbsp;&nbsp;
+          <a href="" @click.prevent="goRegister">没有账号？</a>
         </div>
       </form>
     </div>
@@ -22,44 +17,40 @@
 </template>
 
 <script>
+import { login } from '@/api'
 export default {
-  name: "MyLogin",
+  name: 'MyLogin',
   created() {
-    this.$bus.$emit('tabShow',{tabShow:false})
+    this.$bus.$emit('tabShow', { tabShow: false })
   },
   data() {
     return {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       windowsHeight: window.innerHeight,
-      windowsWidth: window.innerWidth,
-    };
+      windowsWidth: window.innerWidth
+    }
   },
   methods: {
     async login() {
-      let param = new URLSearchParams();
-      param.append("username", this.username);
-      param.append("password", this.password);
+      let param = new URLSearchParams()
+      param.append('username', this.username)
+      param.append('password', this.password)
 
-      const { data: res } = await this.$http({
-        method: "post",
-        url: "/user/login",
-        data: param,
-      });
-      console.log(res);
+      const { data: res } = await login(param)
+      console.log(res)
       if (res.code === 1) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("userId", res.data.userId);
-        localStorage.setItem("username", res.data.username);
-        this.$router.replace("/index");
+        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('userId', res.data.userId)
+        localStorage.setItem('username', res.data.username)
+        this.$router.replace('/index')
       }
-
     },
-    goRegister(){
+    goRegister() {
       this.$router.replace('/register')
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="less" scoped>

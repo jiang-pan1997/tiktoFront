@@ -2,20 +2,12 @@
   <div class="headerContainer">
     <div class="header">
       <div class="return-header">
-        <div class="right-header menu" @click.prevent="goUserMenu">
-          <span class="iconfont icon-mulu"></span>&nbsp;
-        </div>
+        <div class="right-header menu" @click.prevent="goUserMenu"><span class="iconfont icon-mulu"></span>&nbsp;</div>
       </div>
       <div class="author">
         <div class="user-nav">
           <div class="imgContainer">
-            <img
-              :src="
-                authorInfo
-                  ? authorInfo.headPortrait
-                  : require('../../public/images/1.jpg')
-              "
-            />
+            <img :src="authorInfo ? authorInfo.headPortrait : require('../../public/images/1.jpg')" />
           </div>
         </div>
         <div class="user-nav" @click="goAuthorList">
@@ -38,46 +30,39 @@
         <div class="bar" ref="collectedRef" @click="getcollected">收藏</div>
       </div>
     </div>
-    <van-popup
-      v-model="show"
-      position="right"
-      :style="{ height: '100%', width: '50%' }"
-    >
+    <van-popup v-model="show" position="right" :style="{ height: '100%', width: '50%' }">
       <div>
-        <span class="iconfont icon-qiehuanyonghu1 menu_num" @click="goLogin">
-          &nbsp;切换用户
-        </span>
+        <span class="iconfont icon-qiehuanyonghu1 menu_num" @click="goLogin"> &nbsp;切换用户 </span>
       </div>
       <div>
-        <span class="iconfont icon-history menu_num" @click="goUserHostory">
-          &nbsp;观看历史</span
-        >
+        <span class="iconfont icon-history menu_num" @click="goUserHostory"> &nbsp;观看历史</span>
       </div>
     </van-popup>
   </div>
 </template>
 
 <script>
+import { getUserInfo } from '@/api'
 export default {
-  name: "AuthorHeader",
+  name: 'AuthorHeader',
   mounted() {
-    this.$refs.WorksRef.style.borderBottom = "2px solid #000";
-    this.author = localStorage.getItem("author");
+    this.$refs.WorksRef.style.borderBottom = '2px solid #000'
+    this.author = localStorage.getItem('author')
     if (this.author != null) {
-      this.getAuthorInfo();
+      this.getAuthorInfo()
     } else {
-      this.getUserInfo();
+      this.getUserInfo()
     }
   },
   activated() {
-    this.show = false;
-    this.username = localStorage.getItem("username");
-    this.routeJudge();
-    this.author = localStorage.getItem("author");
+    this.show = false
+    this.username = localStorage.getItem('username')
+    this.routeJudge()
+    this.author = localStorage.getItem('author')
     if (this.author != null) {
-      this.getAuthorInfo();
+      this.getAuthorInfo()
     } else {
-      this.getUserInfo();
+      this.getUserInfo()
     }
   },
   deactivated() {},
@@ -87,89 +72,82 @@ export default {
       total: 0,
       likes: 0,
       collected: 0,
-      author: "",
-      username: "",
-      show: false,
-    };
+      author: '',
+      username: '',
+      show: false
+    }
   },
   methods: {
     showPopup() {
-      this.show = true;
+      this.show = true
     },
     onClickLeft() {
-      this.$router.push("/index");
+      this.$router.push('/index')
     },
     getWorks() {
-      this.$refs.WorksRef.style.borderBottom = "2px solid #000";
-      this.$refs.likesRef.style.borderBottom = "none";
-      this.$refs.collectedRef.style.borderBottom = "none";
-      this.$emit("getData");
+      this.$refs.WorksRef.style.borderBottom = '2px solid #000'
+      this.$refs.likesRef.style.borderBottom = 'none'
+      this.$refs.collectedRef.style.borderBottom = 'none'
+      this.$emit('getData')
     },
     getLikes() {
-      this.$refs.WorksRef.style.borderBottom = "none";
-      this.$refs.likesRef.style.borderBottom = "2px solid #000";
-      this.$refs.collectedRef.style.borderBottom = " none";
-      this.$emit("getAuthorLike");
+      this.$refs.WorksRef.style.borderBottom = 'none'
+      this.$refs.likesRef.style.borderBottom = '2px solid #000'
+      this.$refs.collectedRef.style.borderBottom = ' none'
+      this.$emit('getAuthorLike')
     },
     getcollected() {
-      this.$refs.WorksRef.style.borderBottom = "none";
-      this.$refs.likesRef.style.borderBottom = "none";
-      this.$refs.collectedRef.style.borderBottom = "2px solid #000";
-      this.$emit("getAuthorCollected");
+      this.$refs.WorksRef.style.borderBottom = 'none'
+      this.$refs.likesRef.style.borderBottom = 'none'
+      this.$refs.collectedRef.style.borderBottom = '2px solid #000'
+      this.$emit('getAuthorCollected')
     },
     async getUserInfo() {
-      let { data: res } = await this.$http.get(`/contact//getUserInfo`, {
-        params: {
-          userId: localStorage.getItem("userId"),
-        },
-      });
+      let params = {
+        userId: localStorage.getItem('userId')
+      }
+      let { data: res } = await getUserInfo(params)
       if (res.code == 1) {
         if (res.data == null) {
-          return;
+          return
         }
-        this.total = res.data.authorTotal;
-        this.likes = res.data.likes;
-        this.collected = res.data.collected;
+        this.total = res.data.authorTotal
+        this.likes = res.data.likes
+        this.collected = res.data.collected
       }
     },
     goAuthorList() {
       if (this.author) {
-        return;
+        return
       }
-      this.$router.push("/authorList");
+      this.$router.push('/authorList')
     },
     goUserMenu() {
-      this.show = true;
+      this.show = true
     },
     goLogin() {
-      this.$router.replace("/login");
+      this.$router.replace('/login')
     },
     goUserHostory() {
-      this.$router.push("/userHostory");
+      this.$router.push('/userHostory')
     },
     routeJudge() {
-      if (
-        this.$route.path == "/author/like" ||
-        this.$route.path == "/home/like"
-      ) {
-        this.$refs.WorksRef.style.borderBottom = "none";
-        this.$refs.likesRef.style.borderBottom = "2px solid #000";
-        this.$refs.collectedRef.style.borderBottom = " none";
-      } else if (
-        this.$route.path == "/author/collect" ||
-        this.$route.path == "/home/collect"
-      ) {
-        this.$refs.WorksRef.style.borderBottom = "none";
-        this.$refs.likesRef.style.borderBottom = "none";
-        this.$refs.collectedRef.style.borderBottom = "2px solid #000";
+      if (this.$route.path == '/author/like' || this.$route.path == '/home/like') {
+        this.$refs.WorksRef.style.borderBottom = 'none'
+        this.$refs.likesRef.style.borderBottom = '2px solid #000'
+        this.$refs.collectedRef.style.borderBottom = ' none'
+      } else if (this.$route.path == '/author/collect' || this.$route.path == '/home/collect') {
+        this.$refs.WorksRef.style.borderBottom = 'none'
+        this.$refs.likesRef.style.borderBottom = 'none'
+        this.$refs.collectedRef.style.borderBottom = '2px solid #000'
       } else {
-        this.$refs.WorksRef.style.borderBottom = "2px solid #000";
-        this.$refs.likesRef.style.borderBottom = "none";
-        this.$refs.collectedRef.style.borderBottom = "none";
+        this.$refs.WorksRef.style.borderBottom = '2px solid #000'
+        this.$refs.likesRef.style.borderBottom = 'none'
+        this.$refs.collectedRef.style.borderBottom = 'none'
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

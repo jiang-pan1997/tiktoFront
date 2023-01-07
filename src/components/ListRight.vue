@@ -1,136 +1,101 @@
 <template>
   <div class="listright">
     <div class="author-img">
-      <img
-        class="img"
-        :src="videoData.headPortrait"
-        mode="show"
-        @click="goAuthor(videoData.author)"
-      />
+      <img class="img" :src="videoData.headPortrait" mode="show" @click="goAuthor(videoData.author)" />
       <div class="iconfont icon-jiahao_o add" v-show="show" @click="hide"></div>
     </div>
-    <div
-      class="iconfont icon-aixin right-box"
-      :style="{ color: videoData.videoLike == 1 ? 'red' : '' }"
-      @click="changeColor(videoData.videoLike)"
-    ></div>
+    <div class="iconfont icon-aixin right-box" :style="{ color: videoData.videoLike == 1 ? 'red' : '' }" @click="changeColor(videoData.videoLike)"></div>
     <div class="number">
-      {{
-        videoData.likes / 10000 > 1
-          ? videoData.likes / 10000 + "w"
-          : videoData.likes
-      }}
+      {{ videoData.likes / 10000 > 1 ? videoData.likes / 10000 + 'w' : videoData.likes }}
     </div>
-    <div class="iconfont icon-pinglun right-box" @click="showPopup" ></div>
+    <div class="iconfont icon-pinglun right-box" @click="showPopup"></div>
     <div class="number">
-      {{
-        videoData.likes / 10000 > 1
-          ? videoData.likes / 10000 + "w"
-          : videoData.likes
-      }}
+      {{ videoData.likes / 10000 > 1 ? videoData.likes / 10000 + 'w' : videoData.likes }}
     </div>
-    <div
-      class="iconfont icon-shoucang1 right-box"
-      :style="{ color: videoData.videoCollected == 1 ? '#FBB70F' : '' }"
-      @click="changeCollected(videoData.videoCollected)"
-    ></div>
+    <div class="iconfont icon-shoucang1 right-box" :style="{ color: videoData.videoCollected == 1 ? '#FBB70F' : '' }" @click="changeCollected(videoData.videoCollected)"></div>
     <div class="around">
       <img class="img" src="../../public/images/2.png" alt="" />
     </div>
-
   </div>
 </template>
 
 <script>
+import { updateVideoLike, updateVideoCollected } from '@/api'
 export default {
   computed: {
     videoData() {
-      return this.detail || {};
-	  
-    },
+      return this.detail || {}
+    }
   },
-  props: ["detail"],
+  props: ['detail'],
   data() {
     return {
       show: true,
-      color: "",
-      collectColor: "",
-	  showPop: false,
-    };
+      color: '',
+      collectColor: '',
+      showPop: false
+    }
   },
   methods: {
     hide() {
-      this.show = false;
+      this.show = false
     },
     changeColor(like) {
       if (like == 1) {
-        this.videoData.videoLike = 0;
-        this.setVideoLike(0);
+        this.videoData.videoLike = 0
+        this.setVideoLike(0)
       } else {
-        this.videoData.videoLike = 1;
-        this.setVideoLike(1);
+        this.videoData.videoLike = 1
+        this.setVideoLike(1)
       }
     },
     change() {
-      this.color = "red";
+      this.color = 'red'
     },
     changeCollected(collected) {
-      console.log(collected);
+      console.log(collected)
       if (collected == 1) {
-        this.videoData.videoCollected = 0;
-        this.setVideoCollected(0);
+        this.videoData.videoCollected = 0
+        this.setVideoCollected(0)
       } else {
-        this.videoData.videoCollected = 1;
-        this.setVideoCollected(1);
+        this.videoData.videoCollected = 1
+        this.setVideoCollected(1)
       }
     },
     // 修改视频喜欢状态
     async setVideoLike(like) {
-      // const { data: res } = await this.$http.post(
-      //   `/movie/setVideoLike/${this.videoData.id}/${like}`
-      // );
-
-     let data={
-        userId:localStorage.getItem('userId'),
-        worksId:this.videoData.id,
-        relish:like
+      let data = {
+        userId: localStorage.getItem('userId'),
+        worksId: this.videoData.id,
+        relish: like
       }
-      const { data: res } = await this.$http.post(
-        `/contact/setVideoLike`,data
-      );
+      const { data: res } = await updateVideoLike(data)
     },
 
     // 修改视频收藏状态
     async setVideoCollected(collected) {
-      // const { data: res } = await this.$http.post(
-      //   `/movie/setVideoCollected/${this.videoData.id}/${collected}`
-      // );
-
-      let data={
-        userId:localStorage.getItem('userId'),
-        worksId:this.videoData.id,
-        collect:collected
+      let data = {
+        userId: localStorage.getItem('userId'),
+        worksId: this.videoData.id,
+        collect: collected
       }
-      const { data: res } = await this.$http.post(
-        `/contact/setVideoCollected`,data
-      );
+      const { data: res } = await updateVideoCollected(data)
     },
 
     goAuthor() {
-      localStorage.setItem('author',this.videoData.author)
+      localStorage.setItem('author', this.videoData.author)
       this.$router.push({
-        name: "author",
+        name: 'author',
         params: {
-          author: this.videoData.author,
-        },
-      });
+          author: this.videoData.author
+        }
+      })
     },
-	showPopup(){
-		this.$bus.$emit('showPopup')
-	}
-
-  },
-};
+    showPopup() {
+      this.$bus.$emit('showPopup')
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
