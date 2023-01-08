@@ -3,13 +3,13 @@
     <van-swipe ref="Swipe" style="height: 100%" :show-indicators="false" :duration="duration" :initial-swipe="initialSwipe" vertical @change="onChange">
       <van-swipe-item v-for="(item, index) in videoList" :key="item.id">
         <div class="video">
-          <video-play @doubleClick="doubleClick" :windowsHeight="windowsHeight" :currentPage="currentPage" :pageIndex="index" class="video" :videoList="item" ref="videoRef"></video-play>
+          <video-play ref="videoRef" :windows-height="windowsHeight" :current-page="currentPage" :page-index="index" class="video" :video-list="item" @doubleClick="doubleClick" />
         </div>
         <div class="left-box">
-          <list-left :detail="item"></list-left>
+          <list-left :detail="item" />
         </div>
         <div class="right-box">
-          <list-right ref="listRight" :detail="item"></list-right>
+          <list-right ref="listRight" :detail="item" />
         </div>
       </van-swipe-item>
     </van-swipe>
@@ -26,14 +26,29 @@ export default {
     ListLeft,
     ListRight
   },
-  created() {},
-  computed: {},
-  mounted() {
-    try {
-      this.$refs.videoRef[this.pageIndex].videoPlay()
-    } catch (error) {}
-  },
   props: ['videoList', 'pageIndex', 'indexActive', 'total'],
+  // props: {
+  //   videoList: {
+  //     type: Array,
+  //     default() {
+  //       return []
+  //     }
+  //   },
+  //   pageIndex: {
+  //     type: Number,
+  //     default() {
+  //       return 0
+  //     }
+  //   },
+  //   indexActive: {
+  //     type: Boolean,
+  //     default: true
+  //   },
+  //   total: {
+  //     type: Number,
+  //     default: 0
+  //   }
+  // },
   data() {
     return {
       page: 0,
@@ -43,6 +58,15 @@ export default {
       duration: 500,
       currentPage: 0,
       windowsHeight: window.innerHeight
+    }
+  },
+  computed: {},
+  created() {},
+  mounted() {
+    try {
+      this.$refs.videoRef[this.pageIndex].videoPlay()
+    } catch (error) {
+      return
     }
   },
   methods: {

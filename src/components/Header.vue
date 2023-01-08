@@ -23,9 +23,9 @@
       </div>
       <div class="name">{{ author }}</div>
       <div class="option">
-        <div class="bar" ref="WorksRef" @click="getWorks">作品</div>
-        <div class="bar" ref="likesRef" @click="getLikes">喜欢</div>
-        <div class="bar" ref="collectedRef" @click="getcollected">收藏</div>
+        <div ref="WorksRef" class="bar" @click="getWorks">作品</div>
+        <div ref="likesRef" class="bar" @click="getLikes">喜欢</div>
+        <div ref="collectedRef" class="bar" @click="getcollected">收藏</div>
       </div>
     </div>
   </div>
@@ -34,6 +34,15 @@
 <script>
 import { getSignalAuthorInfo } from '@/api'
 export default {
+  data() {
+    return {
+      authorInfo: null,
+      total: 0,
+      likes: 0,
+      collected: 0,
+      author: ''
+    }
+  },
   mounted() {
     this.$refs.WorksRef.style.borderBottom = '2px solid #000'
     this.author = localStorage.getItem('author')
@@ -43,15 +52,6 @@ export default {
     this.routeJudge()
     this.author = localStorage.getItem('author')
     this.getAuthorInfo()
-  },
-  data() {
-    return {
-      authorInfo: null,
-      total: 0,
-      likes: 0,
-      collected: 0,
-      author: ''
-    }
   },
   methods: {
     onClickLeft() {
@@ -77,12 +77,12 @@ export default {
     },
     async getAuthorInfo() {
       this.author = localStorage.getItem('author')
-      let params = {
+      const params = {
         userId: localStorage.getItem('userId'),
         relish: 1,
         collect: 1
       }
-      let { data: res } = await getSignalAuthorInfo(this.author, params)
+      const { data: res } = await getSignalAuthorInfo(this.author, params)
       if (res.code == 1) {
         if (res.data == null) {
           return

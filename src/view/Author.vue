@@ -1,29 +1,27 @@
 <template>
   <div class="author">
-    <Header @getAuthorLike="getAuthorLike" @getData="goWorks" @getAuthorCollected="getAuthorCollected"></Header>
-    <router-view></router-view>
+    <Header @getAuthorLike="getAuthorLike" @getData="goWorks" @getAuthorCollected="getAuthorCollected" />
+    <router-view />
   </div>
 </template>
 
 <script>
-import List from '@/components/List.vue'
 import Header from '@/components/Header.vue'
 export default {
   name: 'Author',
   components: {
-    List,
     Header
-  },
-  created() {
-    this.$bus.$emit('tabShow', { tabShow: false })
-  },
-  computed: {},
-  mounted() {},
-  activated() {
-    this.$bus.$emit('tabShow', { tabShow: false })
   },
   data() {
     return {}
+  },
+  computed: {},
+  created() {
+    this.$bus.$emit('tabShow', { tabShow: false })
+  },
+  mounted() {},
+  activated() {
+    this.$bus.$emit('tabShow', { tabShow: false })
   },
   methods: {
     // 进入视频作者页

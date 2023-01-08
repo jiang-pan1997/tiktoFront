@@ -1,5 +1,5 @@
 <template>
-  <div class="list" ref="listRef">
+  <div ref="listRef" class="list">
     <ul>
       <li v-for="(video, index) in videoList" :key="video.id" @click="goVideoPlay(index)">
         <div class="imgContainer">
@@ -19,6 +19,14 @@
 export default {
   name: '',
   props: ['videoList', 'page'],
+  data() {
+    return {
+      windowsHeiht: window.innerHeight,
+      windowWidth: window.innerWidth,
+      topHeight: 0
+    }
+  },
+  computed: {},
   mounted() {
     window.addEventListener('scroll', this.getTopHeight, true)
   },
@@ -27,14 +35,6 @@ export default {
   },
   deactivated() {
     localStorage.setItem('topHieght', this.topHeight)
-  },
-  computed: {},
-  data() {
-    return {
-      windowsHeiht: window.innerHeight,
-      windowWidth: window.innerWidth,
-      topHeight: 0
-    }
   },
   methods: {
     goVideoPlay(index) {
@@ -48,11 +48,11 @@ export default {
       document.documentElement.scrollTop = 0
     },
     getTopHeight() {
-      //方法一
-      //let topHeight = Math.floor(document.body.scrollTop || document.documentElement.scrollTop || window.pageXOffset)
-      //console.log(topHeight)
+      // 方法一
+      // let topHeight = Math.floor(document.body.scrollTop || document.documentElement.scrollTop || window.pageXOffset)
+      // console.log(topHeight)
 
-      //方法二
+      // 方法二
       this.$nextTick(() => {
         this.topHeight = document.body.scrollTop || document.documentElement.scrollTop || window.pageXOffset
       })

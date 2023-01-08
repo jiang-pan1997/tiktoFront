@@ -1,25 +1,29 @@
 <template>
   <div class="index">
-    <first-nav></first-nav>
-    <VideoList :videoList="videoList" :indexActive="true" :pageIndex="pageIndex"></VideoList>
+    <first-nav />
+    <VideoList :video-list="videoList" :index-active="true" :page-index="pageIndex" />
   </div>
 </template>
 
 <script>
 import FirstNav from '@/components/FirstNav.vue'
-import Tab from '@/components/Tab.vue'
 import VideoList from '@/components/VideoList.vue'
 import { geRandomData } from '@/api'
 export default {
-  name: 'index',
+  name: 'Index',
   components: {
     FirstNav,
-    Tab,
     VideoList
   },
+  data() {
+    return {
+      videoList: [],
+      pageIndex: 0
+    }
+  },
   created() {
-    let result = JSON.parse(localStorage.getItem('indexList'))
-    let pageIndexNum = localStorage.getItem('indexPage')
+    const result = JSON.parse(localStorage.getItem('indexList'))
+    const pageIndexNum = localStorage.getItem('indexPage')
     if (result == null || pageIndexNum == null) {
       this.getData()
     } else {
@@ -32,17 +36,11 @@ export default {
     })
     this.$bus.$emit('tabShow', { tabShow: true, select: 0 })
   },
-  data() {
-    return {
-      videoList: [],
-      pageIndex: 0
-    }
-  },
   methods: {
     // 获取视频数据
     async getData() {
       const { data: res } = await geRandomData()
-      let result = [...this.videoList, ...res.data]
+      const result = [...this.videoList, ...res.data]
       this.videoList = this.uniqueFunc(result)
       localStorage.setItem('indexList', JSON.stringify(this.videoList))
     },

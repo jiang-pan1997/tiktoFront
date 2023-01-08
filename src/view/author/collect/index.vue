@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" :immediate-check="false" @load="onLoad">
-      <List :videoList="videoList" ref="ListRef"></List>
+      <List ref="ListRef" :video-list="videoList" />
     </van-list>
   </div>
 </template>
@@ -10,16 +10,27 @@
 import List from '@/components/List.vue'
 import { getUserCollected } from '@/api'
 export default {
-  name: 'collect',
+  name: 'Collect',
   components: {
     List
   },
+  data() {
+    return {
+      videoList: [],
+      total: 0,
+      author: '',
+      page: 1,
+      pages: 0,
+      loading: false,
+      finished: false
+    }
+  },
+  computed: {},
   created() {
     this.videoList = []
     this.page = 1
     this.getAuthorCollected()
   },
-  computed: {},
   activated() {
     if (this.author != localStorage.getItem('author')) {
       this.videoList = []
@@ -32,22 +43,10 @@ export default {
   deactivated() {
     localStorage.setItem('page', this.page)
   },
-  data() {
-    return {
-      videoList: [],
-      total: 0,
-      author: '',
-      page: 1,
-      total: 0,
-      pages: 0,
-      loading: false,
-      finished: false
-    }
-  },
   methods: {
     async getAuthorCollected() {
       this.author = localStorage.getItem('author')
-      let params = {
+      const params = {
         userId: localStorage.getItem('userId'),
         worksAuthor: localStorage.getItem('author'),
         collect: 1,

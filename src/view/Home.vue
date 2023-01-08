@@ -1,26 +1,17 @@
 <template>
   <div>
-    <AuthorHeader :author="'我的'" @getAuthorLike="getAllLike" @getData="getAllWorker" @getAuthorCollected="getAllCollected"></AuthorHeader>
+    <AuthorHeader :author="'我的'" @getAuthorLike="getAllLike" @getData="getAllWorker" @getAuthorCollected="getAllCollected" />
     <!-- <List :videoList="videoList" ref="ListRef"></List> -->
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 
 <script>
-import List from '@/components/List.vue'
 import AuthorHeader from '@/components/AuthorHeader.vue'
 export default {
   name: 'Home',
   components: {
-    List,
     AuthorHeader
-  },
-  created() {
-    this.$bus.$emit('tabShow', { tabShow: true, select: 3 })
-  },
-  activated() {
-    this.$bus.$emit('tabShow', { tabShow: true, select: 3 })
-    localStorage.removeItem('author')
   },
   data() {
     return {
@@ -28,6 +19,13 @@ export default {
       page: 1,
       total: 0
     }
+  },
+  created() {
+    this.$bus.$emit('tabShow', { tabShow: true, select: 3 })
+  },
+  activated() {
+    this.$bus.$emit('tabShow', { tabShow: true, select: 3 })
+    localStorage.removeItem('author')
   },
   methods: {
     async getAllLike() {

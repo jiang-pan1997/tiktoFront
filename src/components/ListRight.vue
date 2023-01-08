@@ -2,7 +2,7 @@
   <div class="listright">
     <div class="author-img">
       <img class="img" :src="videoData.headPortrait" mode="show" @click="goAuthor(videoData.author)" />
-      <div class="iconfont icon-jiahao_o add" v-show="show" @click="hide"></div>
+      <div v-show="show" class="iconfont icon-jiahao_o add" @click="hide"></div>
     </div>
     <div class="iconfont icon-aixin right-box" :style="{ color: videoData.videoLike == 1 ? 'red' : '' }" @click="changeColor(videoData.videoLike)"></div>
     <div class="number">
@@ -22,11 +22,6 @@
 <script>
 import { updateVideoLike, updateVideoCollected } from '@/api'
 export default {
-  computed: {
-    videoData() {
-      return this.detail || {}
-    }
-  },
   props: ['detail'],
   data() {
     return {
@@ -34,6 +29,11 @@ export default {
       color: '',
       collectColor: '',
       showPop: false
+    }
+  },
+  computed: {
+    videoData() {
+      return this.detail || {}
     }
   },
   methods: {
@@ -64,22 +64,38 @@ export default {
     },
     // 修改视频喜欢状态
     async setVideoLike(like) {
-      let data = {
+      const data = {
         userId: localStorage.getItem('userId'),
         worksId: this.videoData.id,
         relish: like
       }
       const { data: res } = await updateVideoLike(data)
+      if (res.code != 1) {
+        this.$notify({
+          message: '修改失败',
+          color: '#ad0000',
+          background: '#ffe1e1',
+          duration: 1000
+        })
+      }
     },
 
     // 修改视频收藏状态
     async setVideoCollected(collected) {
-      let data = {
+      const data = {
         userId: localStorage.getItem('userId'),
         worksId: this.videoData.id,
         collect: collected
       }
       const { data: res } = await updateVideoCollected(data)
+      if (res.code != 1) {
+        this.$notify({
+          message: '修改失败',
+          color: '#ad0000',
+          background: '#ffe1e1',
+          duration: 1000
+        })
+      }
     },
 
     goAuthor() {

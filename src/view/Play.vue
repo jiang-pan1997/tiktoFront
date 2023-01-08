@@ -1,6 +1,6 @@
 <template>
   <div class="play">
-    <video-list :videoList="videoList" :pageIndex="pageIndex" :total="total" @getNewVideoData="getNewVideoData"></video-list>
+    <video-list :video-list="videoList" :page-index="pageIndex" :total="total" @getNewVideoData="getNewVideoData" />
   </div>
 </template>
 
@@ -12,8 +12,19 @@ export default {
   components: {
     VideoList
   },
+  data() {
+    return {
+      videoList: [],
+      pageIndex: this.$route.params.index,
+      page: 0,
+      total: 0,
+      pathEnterUrl: '',
+      likes: 0,
+      collected: 0
+    }
+  },
   created() {
-    let result = JSON.parse(localStorage.getItem('videoList'))
+    const result = JSON.parse(localStorage.getItem('videoList'))
     this.videoList = result
     this.$bus.$emit('tabShow', { tabShow: false })
     this.author = localStorage.getItem('author')
@@ -28,30 +39,16 @@ export default {
     this.getNewVideoData()
   },
   updated() {
-    if (this.pathEnterUrl == '/author/works' || this.pathEnterUrl == '/home/works') {
-      this.total = this.total
-    } else if (this.pathEnterUrl == '/author/like' || this.pathEnterUrl == '/home/like') {
+    if (this.pathEnterUrl == '/author/like' || this.pathEnterUrl == '/home/like') {
       this.total = this.likes
     } else if (this.pathEnterUrl == '/author/collect' || this.pathEnterUrl == '/home/collect') {
       this.total = this.collected
-    } else if (this.pathEnterUrl == '/userHostory') {
     }
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.pathEnterUrl = from.fullPath
     })
-  },
-  data() {
-    return {
-      videoList: [],
-      pageIndex: this.$route.params.index,
-      page: 0,
-      total: 0,
-      pathEnterUrl: '',
-      likes: 0,
-      collected: 0
-    }
   },
   methods: {
     // 获取视频数据
@@ -70,12 +67,12 @@ export default {
     async getAuthorPageDate() {
       this.author = localStorage.getItem('author')
       this.page = this.page + 1
-      let params = {
+      const params = {
         author: localStorage.getItem('author'),
         page: this.page,
         pageSize: 10
       }
-      let { data: res } = await getAuthorWorksList(params)
+      const { data: res } = await getAuthorWorksList(params)
       this.videoList = [...this.videoList, ...res.data.records]
       this.total = res.data.total
       this.pages = res.data.pages
@@ -85,7 +82,7 @@ export default {
     async getAuthorLike() {
       this.author = localStorage.getItem('author')
       this.page = this.page + 1
-      let params = {
+      const params = {
         userId: localStorage.getItem('userId'),
         worksAuthor: localStorage.getItem('author'),
         relish: 1,
@@ -102,7 +99,7 @@ export default {
     async getAuthorCollected() {
       this.author = localStorage.getItem('author')
       this.page = this.page + 1
-      let params = {
+      const params = {
         userId: localStorage.getItem('userId'),
         worksAuthor: localStorage.getItem('author'),
         collect: 1,
@@ -117,7 +114,7 @@ export default {
     },
     async getUserVideoHostory() {
       this.page = this.page + 1
-      let params = {
+      const params = {
         userId: localStorage.getItem('userId'),
         page: this.page,
         pageSize: 10
@@ -130,12 +127,12 @@ export default {
     },
     async getAuthorInfo() {
       this.author = localStorage.getItem('author')
-      let params = {
+      const params = {
         userId: localStorage.getItem('userId'),
         relish: 1,
         collect: 1
       }
-      let { data: res } = await getSignalAuthorInfo(this.author, params)
+      const { data: res } = await getSignalAuthorInfo(this.author, params)
       if (res.code == 1) {
         if (res.data == null) {
           return
@@ -147,10 +144,10 @@ export default {
       }
     },
     async getUserInfo() {
-      let params = {
+      const params = {
         userId: localStorage.getItem('userId')
       }
-      let { data: res } = await getUserInfo(params)
+      const { data: res } = await getUserInfo(params)
       if (res.code == 1) {
         if (res.data == null) {
           return

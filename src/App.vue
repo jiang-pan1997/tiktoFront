@@ -3,9 +3,9 @@
     <keep-alive include="Author,Home">
       <router-view />
     </keep-alive>
-    <Tab v-show="tabShow" :select="select"></Tab>
+    <Tab v-show="tabShow" :select="select" />
     <van-popup v-model="showPop" closeable position="bottom" :style="{ height: '50%' }">
-      <Comment v-if="showPop"></Comment>
+      <Comment v-if="showPop" />
     </van-popup>
   </div>
 </template>
@@ -14,20 +14,10 @@
 import Tab from '@/components/Tab.vue'
 import Comment from '@/components/Comment.vue'
 export default {
-  name: '',
+  name: 'App',
   components: {
     Tab,
     Comment
-  },
-  created() {
-    localStorage.setItem('indexPage', 0)
-    localStorage.removeItem('indexList')
-    this.$bus.$on('tabShow', ({ tabShow, select }) => {
-      ;(this.tabShow = tabShow), (this.select = select)
-    })
-    this.$bus.$on('showPopup', () => {
-      this.showPop = true
-    })
   },
   data() {
     return {
@@ -37,6 +27,17 @@ export default {
       select: 0,
       showPop: false
     }
+  },
+  created() {
+    localStorage.setItem('indexPage', 0)
+    localStorage.removeItem('indexList')
+    this.$bus.$on('tabShow', ({ tabShow, select }) => {
+      this.tabShow = tabShow
+      this.select = select
+    })
+    this.$bus.$on('showPopup', () => {
+      this.showPop = true
+    })
   },
   methods: {
     goIndex() {

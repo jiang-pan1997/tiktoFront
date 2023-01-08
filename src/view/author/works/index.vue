@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" :immediate-check="false" @load="onLoad">
-      <List :videoList="videoList" ref="ListRef"></List>
+      <List ref="ListRef" :video-list="videoList" />
     </van-list>
   </div>
 </template>
@@ -10,27 +10,9 @@
 import { getAuthorWorksList } from '@/api'
 import List from '@/components/List.vue'
 export default {
-  name: 'works',
+  name: 'Works',
   components: {
     List
-  },
-  created() {
-    this.videoList = []
-    this.page = 1
-    this.getData()
-  },
-  computed: {},
-  activated() {
-    if (this.author != localStorage.getItem('author')) {
-      this.videoList = []
-      this.page = 1
-      this.loading = false
-      this.finished = false
-      this.getData()
-    }
-  },
-  deactivated() {
-    localStorage.setItem('page', this.page)
   },
   data() {
     return {
@@ -43,16 +25,34 @@ export default {
       finished: false
     }
   },
+  computed: {},
+  created() {
+    this.videoList = []
+    this.page = 1
+    this.getData()
+  },
+  activated() {
+    if (this.author != localStorage.getItem('author')) {
+      this.videoList = []
+      this.page = 1
+      this.loading = false
+      this.finished = false
+      this.getData()
+    }
+  },
+  deactivated() {
+    localStorage.setItem('page', this.page)
+  },
   methods: {
     // 获取视频数据
     async getData() {
       this.author = localStorage.getItem('author')
-      let params = {
+      const params = {
         author: localStorage.getItem('author'),
         page: this.page,
         pageSize: 10
       }
-      let { data: res } = await getAuthorWorksList(params)
+      const { data: res } = await getAuthorWorksList(params)
       this.videoList = [...this.videoList, ...res.data.records]
       this.total = res.data.total
       this.pages = res.data.pages

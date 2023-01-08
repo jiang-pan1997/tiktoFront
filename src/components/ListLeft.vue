@@ -13,29 +13,29 @@
 <script>
 export default {
   props: ['detail'],
+  data() {
+    return {}
+  },
   computed: {
     videoData() {
       return this.detail || {}
     }
   },
-  data() {
-    return {}
-  },
   created() {},
   methods: {
-    //格式化时间
+    // 格式化时间
     format(time) {
       var dat = new Date(time * 1000)
-      //获取年月日，时间
-      let year = dat.getFullYear()
-      let mon = dat.getMonth() + 1 < 10 ? '0' + (dat.getMonth() + 1) : dat.getMonth() + 1
-      let data = dat.getDate() < 10 ? '0' + dat.getDate() : dat.getDate()
-      let hour = dat.getHours() < 10 ? '0' + dat.getHours() : dat.getHours()
-      let min = dat.getMinutes() < 10 ? '0' + dat.getMinutes() : dat.getMinutes()
-      let seon = dat.getSeconds() < 10 ? '0' + dat.getSeconds() : dat.getSeconds()
+      // 获取年月日，时间
+      const year = dat.getFullYear()
+      const mon = dat.getMonth() + 1 < 10 ? '0' + (dat.getMonth() + 1) : dat.getMonth() + 1
+      const data = dat.getDate() < 10 ? '0' + dat.getDate() : dat.getDate()
+      const hour = dat.getHours() < 10 ? '0' + dat.getHours() : dat.getHours()
+      const min = dat.getMinutes() < 10 ? '0' + dat.getMinutes() : dat.getMinutes()
+      const seon = dat.getSeconds() < 10 ? '0' + dat.getSeconds() : dat.getSeconds()
 
-      // let newDate = year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
-      let newDate = year + '-' + mon + '-' + data + ' ' + hour + ':' + min
+      const newDate = year + '-' + mon + '-' + data + ' ' + hour + ':' + min + ':' + seon
+      // const newDate = year + '-' + mon + '-' + data + ' ' + hour + ':' + min
       return newDate
     }
   }

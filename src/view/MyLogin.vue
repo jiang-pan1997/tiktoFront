@@ -1,11 +1,11 @@
 <template>
   <div class="login-app" :style="{ height: windowsHeight + 'px' }">
     <div id="loginDiv" style="height: 350px">
-      <form action="" id="form">
+      <form id="form" action="">
         <h1 id="loginMsg">LOGIN IN</h1>
-        <p>Username:<input id="username" name="username" type="text" v-model="username" /></p>
+        <p>Username:<input id="username" v-model="username" name="username" type="text" /></p>
 
-        <p>Password:<input id="password" name="password" type="password" v-model="password" /></p>
+        <p>Password:<input id="password" v-model="password" name="password" type="password" /></p>
         <p>Remember:<input id="remember" name="remember" type="checkbox" /></p>
         <div id="subDiv">
           <input type="submit" class="button" value="登陆" @click.prevent="login" />&nbsp;&nbsp;&nbsp; <input type="reset" class="button" value="重置" />&nbsp;&nbsp;&nbsp;
@@ -20,9 +20,6 @@
 import { login } from '@/api'
 export default {
   name: 'MyLogin',
-  created() {
-    this.$bus.$emit('tabShow', { tabShow: false })
-  },
   data() {
     return {
       username: '',
@@ -31,9 +28,12 @@ export default {
       windowsWidth: window.innerWidth
     }
   },
+  created() {
+    this.$bus.$emit('tabShow', { tabShow: false })
+  },
   methods: {
     async login() {
-      let param = new URLSearchParams()
+      const param = new URLSearchParams()
       param.append('username', this.username)
       param.append('password', this.password)
 

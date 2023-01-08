@@ -1,23 +1,18 @@
 <template>
   <div class="tab" :style="{ backgroundColor: bgc }">
-    <div class="tab-box" @click="goIndex" :style="{ color: select == 0 ? '#1989fa' : color }">首页</div>
-    <div class="tab-box" @click="goLikes" :style="{ color: select == 1 ? '#1989fa' : color }">喜欢</div>
+    <div class="tab-box" :style="{ color: select == 0 ? '#1989fa' : color }" @click="goIndex">首页</div>
+    <div class="tab-box" :style="{ color: select == 1 ? '#1989fa' : color }" @click="goLikes">喜欢</div>
     <div class="tab-box" @click="goAdd">
       <div class="iconfont icon-jiahao_o icon-box" :style="{ backgroundColor: color, color: bgc }"></div>
     </div>
 
-    <div class="tab-box" @click="goCollected" :style="{ color: select == 2 ? '#1989fa' : color }">收藏</div>
-    <div class="tab-box" @click="goHome" :style="{ color: select == 3 ? '#1989fa' : color }">我的</div>
+    <div class="tab-box" :style="{ color: select == 2 ? '#1989fa' : color }" @click="goCollected">收藏</div>
+    <div class="tab-box" :style="{ color: select == 3 ? '#1989fa' : color }" @click="goHome">我的</div>
   </div>
 </template>
 
 <script>
 export default {
-  created() {
-    this.$bus.$on('videoInfo', videoInfo => {
-      this.videoInfo = videoInfo
-    })
-  },
   props: ['select'],
   data() {
     return {
@@ -25,6 +20,11 @@ export default {
       bgc: '#000',
       color: '#FFFFFF'
     }
+  },
+  created() {
+    this.$bus.$on('videoInfo', videoInfo => {
+      this.videoInfo = videoInfo
+    })
   },
   updated() {},
   methods: {

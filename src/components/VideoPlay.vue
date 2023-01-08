@@ -2,8 +2,8 @@
   <div class="videoPlayer" @click="click">
     <video
       id="video"
-      class="video"
       ref="videoList"
+      class="video"
       :style="{ height: windowsHeight - 60 + 'px' }"
       x5-video-player-type="h5"
       :poster="videoList.imgUrl"
@@ -13,8 +13,8 @@
       playsinline="true"
       x5-video-player-fullscreen="false"
       :src="videoList.videoUrl"
-      v-on:ended="ended"
-      v-on:play="play"
+      @ended="ended"
+      @play="play"
     ></video>
   </div>
 </template>
@@ -23,9 +23,14 @@
 import { updateVideoPlayAllNum, updateUserVideoData } from '@/api'
 export default {
   name: '',
-  created() {},
-  mounted() {
-    this.playNum = this.videoList.playNum
+  props: ['videoList', 'currentPage', 'pageIndex', 'windowsHeight'],
+  data() {
+    return {
+      playStatus: false,
+      dblclick: false,
+      playNum: 0,
+      firstPlay: true
+    }
   },
   computed: {},
   watch: {
@@ -38,19 +43,14 @@ export default {
       }
     }
   },
-  props: ['videoList', 'currentPage', 'pageIndex', 'windowsHeight'],
-  data() {
-    return {
-      playStatus: false,
-      dblclick: false,
-      playNum: 0,
-      firstPlay: true
-    }
+  created() {},
+  mounted() {
+    this.playNum = this.videoList.playNum
   },
   methods: {
     // 单击事件
     singleClick() {
-      let video = this.$refs.videoList
+      const video = this.$refs.videoList
       if (!this.playStatus) {
         video.play()
         this.playStatus = true
@@ -65,7 +65,7 @@ export default {
       setTimeout(() => {
         if (this.dblclick) {
           // 单击
-          let video = this.$refs.videoList
+          const video = this.$refs.videoList
           if (!this.playStatus) {
             video.play()
             this.playStatus = true
@@ -82,27 +82,35 @@ export default {
     },
     //    播放函数
     videoPlay() {
-      let video = this.$refs.videoList
+      const video = this.$refs.videoList
       video.currentTime = 0
       video.play()
       this.playStatus = true
     },
     // 暂停函数
     videoPause() {
-      let video = this.$refs.videoList
+      const video = this.$refs.videoList
       video.currentTime = 0.0
       video.pause()
       this.playStatus = false
     },
     // 所以总共播放量统计
     async updateAllVideoPlay() {
-      let data = {
+      const data = {
         id: this.videoList.id
       }
-      let { data: res } = await updateVideoPlayAllNum(data)
+      const { data: res } = await updateVideoPlayAllNum(data)
+      if (res.code != 1) {
+        this.$notify({
+          message: '修改失败',
+          color: '#ad0000',
+          background: '#ffe1e1',
+          duration: 1000
+        })
+      }
     },
     ended() {
-      let video = this.$refs.videoList
+      const video = this.$refs.videoList
       video.currentTime = 0
       video.play()
       this.updateUserVideoData()
@@ -116,12 +124,20 @@ export default {
       }
     },
     async updateUserVideoData() {
-      let data = {
+      const data = {
         worksId: this.videoList.id,
         userId: localStorage.getItem('userId'),
         worksAuthor: this.videoList.author
       }
-      let { data: res } = await updateUserVideoData(data)
+      const { data: res } = await updateUserVideoData(data)
+      if (res.code != 1) {
+        this.$notify({
+          message: '修改失败',
+          color: '#ad0000',
+          background: '#ffe1e1',
+          duration: 1000
+        })
+      }
     }
   }
 }

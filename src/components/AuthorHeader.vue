@@ -25,9 +25,9 @@
       </div>
       <div class="name">{{ username }}</div>
       <div class="option">
-        <div class="bar" ref="WorksRef" @click="getWorks">作品</div>
-        <div class="bar" ref="likesRef" @click="getLikes">喜欢</div>
-        <div class="bar" ref="collectedRef" @click="getcollected">收藏</div>
+        <div ref="WorksRef" class="bar" @click="getWorks">作品</div>
+        <div ref="likesRef" class="bar" @click="getLikes">喜欢</div>
+        <div ref="collectedRef" class="bar" @click="getcollected">收藏</div>
       </div>
     </div>
     <van-popup v-model="show" position="right" :style="{ height: '100%', width: '50%' }">
@@ -45,6 +45,17 @@
 import { getUserInfo } from '@/api'
 export default {
   name: 'AuthorHeader',
+  data() {
+    return {
+      authorInfo: null,
+      total: 0,
+      likes: 0,
+      collected: 0,
+      author: '',
+      username: '',
+      show: false
+    }
+  },
   mounted() {
     this.$refs.WorksRef.style.borderBottom = '2px solid #000'
     this.author = localStorage.getItem('author')
@@ -66,17 +77,6 @@ export default {
     }
   },
   deactivated() {},
-  data() {
-    return {
-      authorInfo: null,
-      total: 0,
-      likes: 0,
-      collected: 0,
-      author: '',
-      username: '',
-      show: false
-    }
-  },
   methods: {
     showPopup() {
       this.show = true
@@ -103,10 +103,10 @@ export default {
       this.$emit('getAuthorCollected')
     },
     async getUserInfo() {
-      let params = {
+      const params = {
         userId: localStorage.getItem('userId')
       }
-      let { data: res } = await getUserInfo(params)
+      const { data: res } = await getUserInfo(params)
       if (res.code == 1) {
         if (res.data == null) {
           return

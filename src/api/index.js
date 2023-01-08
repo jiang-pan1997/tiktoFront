@@ -15,10 +15,10 @@ export const getAuthorList = () => request({ url: '/movie/getAllAuthor', method:
 // 获取作者分页视频列表数据
 export const getAuthorWorksList = params => request({ url: '/movie/getAuthor', method: 'get', params })
 
-//获取用户作者页喜欢列表
+// 获取用户作者页喜欢列表
 export const getAuthorLike = params => request({ url: '/contact/getUserLike', method: 'get', params })
 
-//获取用户作者页喜欢列表
+// 获取用户作者页喜欢列表
 export const getAuthorCollected = params => request({ url: '/contact/getUserCollected', method: 'get', params })
 
 // 获取用户观看历史记录信息

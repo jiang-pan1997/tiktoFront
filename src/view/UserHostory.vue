@@ -2,7 +2,7 @@
   <div>
     <h4>历史记录</h4>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" :immediate-check="false" @load="onLoad">
-      <List :videoList="videoList" ref="ListRef"></List>
+      <List ref="ListRef" :video-list="videoList" />
     </van-list>
   </div>
 </template>
@@ -15,31 +15,30 @@ export default {
   components: {
     List
   },
-  created() {
-    this.videoList = []
-    this.page = 1
-    this.getUserVideoHostory()
-  },
-  computed: {},
-  destroyed() {
-    localStorage.setItem('page', this.page)
-  },
   data() {
     return {
       videoList: [],
       total: 0,
       author: '',
       page: 1,
-      total: 0,
       pages: 0,
       loading: false,
       finished: false
     }
   },
+  computed: {},
+  created() {
+    this.videoList = []
+    this.page = 1
+    this.getUserVideoHostory()
+  },
+  destroyed() {
+    localStorage.setItem('page', this.page)
+  },
   methods: {
     async getUserVideoHostory() {
       this.author = localStorage.getItem('author')
-      let params = {
+      const params = {
         userId: localStorage.getItem('userId'),
         page: this.page,
         pageSize: 10

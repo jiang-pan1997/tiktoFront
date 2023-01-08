@@ -9,43 +9,43 @@
       <!-- 视频图片-->
       <div class="form-group">
         <label for="exampleInputFile">请上传视频封面：</label>
-        <input type="file" id="file_img" multiple="multiple" name="img" />
+        <input id="file_img" type="file" multiple="multiple" name="img" />
         <p class="help-block">Example block-level help text here.</p>
-        <img :src="novelImgPosition" alt="..." class="img-rounded" id="img_original" width="250" style="display: none" />
+        <img id="img_original" :src="novelImgPosition" alt="..." class="img-rounded" width="250" style="display: none" />
       </div>
       <!-- 视频-->
       <div class="form-group">
         <label for="novel_file">请上传视频文件：</label>
-        <input type="file" id="file_video" multiple="multiple" name="novel_file" @change="matching(this)" />
+        <input id="file_video" type="file" multiple="multiple" name="novel_file" @change="matching(this)" />
         <p class="help-block">Example block-level help text here.</p>
       </div>
-      <button type="submit" class="btn btn-primary" id="btn" @click.prevent="Add">添加</button>
+      <button id="btn" type="submit" class="btn btn-primary" @click.prevent="Add">添加</button>
     </div>
     <hr />
     <!-- 视频信息与作者头像上传 -->
     <div class="form-group">
       <label for="novel_file">请上传作者头像：</label>
-      <input type="file" id="AuthorImg" multiple="multiple" name="img" @change="uploadAuthorImg" />
+      <input id="AuthorImg" type="file" multiple="multiple" name="img" @change="uploadAuthorImg" />
       <label for="novel_file">请上传视频资料文件：</label>
-      <input type="file" name="" id="videoData" @change="getVideoData" />
+      <input id="videoData" type="file" name="" @change="getVideoData" />
       <br />
-      <button type="submit" class="btn btn-primary" id="btn" @click.prevent="PostVideoData">发送视频详细信息</button>
+      <button id="btn" type="submit" class="btn btn-primary" @click.prevent="PostVideoData">发送视频详细信息</button>
     </div>
     <hr />
     <!-- 视频发布时间上传 -->
     <div class="form-group">
       <label for="novel_file">请选择视频发布时间文件：</label>
-      <input type="file" name="" id="videoCreateTime" @change="getVideoDataReleaseTime" />
+      <input id="videoCreateTime" type="file" name="" @change="getVideoDataReleaseTime" />
       <br />
-      <button type="submit" class="btn btn-primary" id="btn" @click.prevent="PostDataAllReleaseTime">发送视频创作时间</button>
+      <button id="btn" type="submit" class="btn btn-primary" @click.prevent="PostDataAllReleaseTime">发送视频创作时间</button>
     </div>
     <hr />
     <!-- 视频评论上传 -->
     <div class="form-group">
       <label for="novel_file">请选择视频评论数据文件：</label>
-      <input type="file" name="" id="videoComment" @change="getVideoCommentData" />
+      <input id="videoComment" type="file" name="" @change="getVideoCommentData" />
       <br />
-      <button type="submit" class="btn btn-primary" id="btn" @click.prevent="PostVideoCommentData">发送视频评论数据</button>
+      <button id="btn" type="submit" class="btn btn-primary" @click.prevent="PostVideoCommentData">发送视频评论数据</button>
     </div>
   </div>
 </template>
@@ -54,12 +54,8 @@
 import Axios from 'axios'
 export default {
   name: 'VideoAdd',
-  created() {
-    this.$bus.$emit('tabShow', { tabShow: false })
-  },
   data() {
     return {
-      novelImgPosition: '',
       UpLoading: false,
       Index: [],
       flag: true,
@@ -74,6 +70,9 @@ export default {
       videoData: []
     }
   },
+  created() {
+    this.$bus.$emit('tabShow', { tabShow: false })
+  },
   methods: {
     // 图片与视频相互匹配
     matching() {
@@ -82,11 +81,11 @@ export default {
       console.log(imgarr)
       console.log(novelArr)
       for (let i = 0; i < imgarr.length; i++) {
-        let temp = []
-        let sign = imgarr[i].name.substring(0, imgarr[i].name.indexOf('.'))
+        const temp = []
+        const sign = imgarr[i].name.substring(0, imgarr[i].name.indexOf('.'))
         for (let j = 0; j < novelArr.length; j++) {
           if (sign === novelArr[j].name.substring(0, novelArr[j].name.indexOf('.'))) {
-            let obj = { first: i, second: j }
+            const obj = { first: i, second: j }
             temp.push(obj)
             this.Index.push(...temp)
           }
@@ -95,8 +94,8 @@ export default {
     },
     // 图片上传
     async uploadImg(index) {
-      var formData = new FormData() //需要用到formData
-      formData.append('img', document.getElementById('file_img').files[index]) //添加选择的文件 key值为file
+      var formData = new FormData() // 需要用到formData
+      formData.append('img', document.getElementById('file_img').files[index]) // 添加选择的文件 key值为file
       const { data: res } = await Axios.post('http://localhost:8000/storageServices/picture/upload', formData, {
         'Content-type': 'multipart/form-data'
       })
@@ -112,8 +111,8 @@ export default {
     },
     // 视频上传
     async uploadVideo(index) {
-      var formData = new FormData() //需要用到formData
-      formData.append('video', document.getElementById('file_video').files[index]) //添加选择的文件 key值为file
+      var formData = new FormData() // 需要用到formData
+      formData.append('video', document.getElementById('file_video').files[index]) // 添加选择的文件 key值为file
       const { data: res } = await Axios.post('http://localhost:8000/storageServices/video/upload', formData, {
         'Content-type': 'multipart/form-data'
       })
@@ -151,7 +150,7 @@ export default {
     },
     // 图片与视频循环上传
     async Add() {
-      let indexTemp = this.Index
+      const indexTemp = this.Index
       for (let i = 0; i < indexTemp.length; i++) {
         await this.uploadImg(indexTemp[i].first)
         await this.uploadVideo(indexTemp[i].second)
@@ -161,8 +160,8 @@ export default {
     },
     // 上传作者头像
     async uploadAuthorImg() {
-      var formData = new FormData() //需要用到formData
-      formData.append('img', document.getElementById('AuthorImg').files[0]) //添加选择的文件 key值为file
+      var formData = new FormData() // 需要用到formData
+      formData.append('img', document.getElementById('AuthorImg').files[0]) // 添加选择的文件 key值为file
       const { data: res } = await Axios.post('http://localhost:8000/storageServices/picture/upload', formData, {
         'Content-type': 'multipart/form-data'
       })
@@ -193,7 +192,7 @@ export default {
             // console.log(parseFloat(videoTemp[3]));
             videoTemp[3] = parseFloat(videoTemp[3])
           }
-          let obj = {
+          const obj = {
             likes: videoTemp[3],
             author: videoTemp[4],
             name: videoTemp[2]
@@ -218,7 +217,7 @@ export default {
     },
     // 循环发送视频单个详细信息
     PostVideoData() {
-      let dataArr = this.videoData
+      const dataArr = this.videoData
       for (let i = 0; i < dataArr.length; i++) {
         this.PostVideoSignalData(dataArr[i].likes, dataArr[i].author, dataArr[i].name)
       }
@@ -234,7 +233,7 @@ export default {
         content = content.split('\n')
         for (let i = 0; i < content.length; i++) {
           videoTemp = content[i].split('\t')
-          let obj = {
+          const obj = {
             name: videoTemp[0],
             releaseTime: videoTemp[1]
           }
@@ -254,7 +253,7 @@ export default {
     },
     // 循环发送视频单个视频创作时间
     PostDataAllReleaseTime() {
-      let dataArr = this.videoData
+      const dataArr = this.videoData
       for (let i = 0; i < dataArr.length; i++) {
         this.PostVideoDataReleaseTime(dataArr[i].name, dataArr[i].releaseTime)
       }
@@ -283,11 +282,19 @@ export default {
       params.append('replyCommentTotal', data.reply_comment_total)
       params.append('text', data.text)
       const { data: res } = await Axios.post('http://localhost:9696/comment/upload', params)
+      if (res.code != 1) {
+        this.$notify({
+          message: '修改失败',
+          color: '#ad0000',
+          background: '#ffe1e1',
+          duration: 1000
+        })
+      }
     },
-    //批量上传评论数据
+    // 批量上传评论数据
     PostVideoCommentData() {
       for (let i = 0; i < this.commentData.length; i++) {
-        const obj1 = JSON.parse(this.commentData[i]) //https://p3-pc.douyinpic.com/aweme/100x100/
+        const obj1 = JSON.parse(this.commentData[i]) // https://p3-pc.douyinpic.com/aweme/100x100/
         obj1.avatar_uri = 'https://p3-pc.douyinpic.com/aweme/100x100/' + obj1.avatar_uri
         this.getVideoCommentData(obj1)
       }

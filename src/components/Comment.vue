@@ -4,7 +4,7 @@
     <div class="header">{{ total }}条评论</div>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" :immediate-check="false" @load="onLoad">
       <!-- 单个评论内容 -->
-      <div class="comment" v-for="item in comments" :key="item.id">
+      <div v-for="item in comments" :key="item.id" class="comment">
         <!-- 头像显示 -->
         <div class="imgContainer">
           <img :src="item.avatarUri" alt="" />
@@ -24,9 +24,6 @@
 import { getCommentData } from '@/api'
 export default {
   name: 'Comment',
-  created() {
-    this.getComment()
-  },
   data() {
     return {
       comments: [],
@@ -37,9 +34,12 @@ export default {
       finished: false
     }
   },
+  created() {
+    this.getComment()
+  },
   methods: {
     async getComment() {
-      let params = {
+      const params = {
         page: this.page,
         pageSize: 20
       }
@@ -52,16 +52,16 @@ export default {
     },
     format(time) {
       var dat = new Date(time * 1000)
-      //获取年月日，时间
-      let year = dat.getFullYear()
-      let mon = dat.getMonth() + 1 < 10 ? '0' + (dat.getMonth() + 1) : dat.getMonth() + 1
-      let data = dat.getDate() < 10 ? '0' + dat.getDate() : dat.getDate()
-      let hour = dat.getHours() < 10 ? '0' + dat.getHours() : dat.getHours()
-      let min = dat.getMinutes() < 10 ? '0' + dat.getMinutes() : dat.getMinutes()
-      let seon = dat.getSeconds() < 10 ? '0' + dat.getSeconds() : dat.getSeconds()
+      // 获取年月日，时间
+      const year = dat.getFullYear()
+      const mon = dat.getMonth() + 1 < 10 ? '0' + (dat.getMonth() + 1) : dat.getMonth() + 1
+      const data = dat.getDate() < 10 ? '0' + dat.getDate() : dat.getDate()
+      const hour = dat.getHours() < 10 ? '0' + dat.getHours() : dat.getHours()
+      const min = dat.getMinutes() < 10 ? '0' + dat.getMinutes() : dat.getMinutes()
+      const seon = dat.getSeconds() < 10 ? '0' + dat.getSeconds() : dat.getSeconds()
 
       // let newDate = year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
-      let newDate = year + '-' + mon + '-' + data + ' ' + hour + ':' + min
+      const newDate = year + '-' + mon + '-' + data + ' ' + hour + ':' + min + ':' + seon
       return newDate
     },
     getTimer(pubDate) {
@@ -70,8 +70,8 @@ export default {
       var day = hour * 24
       var week = day * 7
       var month = day * 30
-      var time1 = new Date().getTime() //当前的时间戳
-      var time2 = pubDate //指定时间的时间戳
+      var time1 = new Date().getTime() // 当前的时间戳
+      var time2 = pubDate // 指定时间的时间戳
       var time = time1 - time2
 
       var result = null

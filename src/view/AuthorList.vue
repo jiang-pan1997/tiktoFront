@@ -9,18 +9,18 @@
 import { getAuthorList } from '@/api'
 export default {
   name: 'AuthorList',
-  created() {
-    this.getAuthorList()
-    this.$bus.$emit('tabShow', { tabShow: false })
-  },
   data() {
     return {
       authorList: []
     }
   },
+  created() {
+    this.getAuthorList()
+    this.$bus.$emit('tabShow', { tabShow: false })
+  },
   methods: {
     async getAuthorList() {
-      let { data: res } = await getAuthorList()
+      const { data: res } = await getAuthorList()
       this.authorList = res.data
     },
     goAuthor(author) {
